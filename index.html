@@ -144,6 +144,20 @@ button:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 #groups div{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:14px;background:var(--glass);border:1px solid var(--brass);white-space:nowrap}
 #groups b{font:600 17px/1 var(--display);margin-left:4px}
 #groups span{font:700 12px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--brass);margin-left:auto;padding-left:10px}
+#fxtint{position:fixed;inset:0;pointer-events:none;opacity:0;transition:opacity .35s;background:radial-gradient(ellipse at center,transparent 38%,var(--tint,#ff3b00) 100%)}
+#fxtint.on{opacity:.75}
+#fxlines{position:fixed;inset:0;overflow:hidden;pointer-events:none;opacity:0;transition:opacity .2s}
+#fxlines::before{content:"";position:absolute;inset:-50%;
+  background:repeating-conic-gradient(from 0deg,transparent 0deg 5deg,rgba(255,240,190,.5) 5deg 6deg);
+  -webkit-mask:radial-gradient(circle,transparent 18%,#000 45%);mask:radial-gradient(circle,transparent 18%,#000 45%)}
+#fxlines.on{opacity:1}
+#fxlines.on::before{animation:spin 1.2s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#combo::before{content:"";position:absolute;left:50%;top:40%;width:340px;height:340px;margin:-170px 0 0 -170px;z-index:-1;border-radius:50%;
+  background:repeating-conic-gradient(from 0deg,rgba(255,201,77,.55) 0deg 8deg,transparent 8deg 20deg);
+  -webkit-mask:radial-gradient(circle,#000 20%,transparent 68%);mask:radial-gradient(circle,#000 20%,transparent 68%);animation:spin 3s linear infinite}
+.pop{position:fixed;transform:translate(-50%,-50%);font:900 18px/1 var(--display);color:#ffd970;-webkit-text-stroke:1px #8a0a1f;text-shadow:0 2px 0 #8a0a1f;pointer-events:none;animation:rise .9s ease-out forwards;white-space:nowrap}
+@keyframes rise{0%{opacity:0;transform:translate(-50%,-30%) scale(.6)}20%{opacity:1;transform:translate(-50%,-60%) scale(1.25)}100%{opacity:0;transform:translate(-50%,-260%) scale(1)}}
 #flash{position:fixed;inset:0;background:#fff3d0;opacity:0;pointer-events:none}
 #flash.go{animation:flash .5s ease-out}
 @keyframes flash{0%{opacity:.85}100%{opacity:0}}
@@ -176,6 +190,9 @@ body.cn .pl.on{border-color:#ffd970;box-shadow:0 0 0 2px rgba(200,16,46,.5)}
   <div id="combo"></div>
   <div id="groups"></div>
   <div id="flash"></div>
+  <div id="fxtint"></div>
+  <div id="fxlines"></div>
+  <div id="pops"></div>
 
   <div id="msg"></div>
 
@@ -439,6 +456,20 @@ const shadeMat = new THREE.MeshPhongMaterial({color: 0x1d5a3e, shininess: 90, si
 const bulbMat = new THREE.MeshBasicMaterial({color: 0xfff1c8});
 const cordMat = new THREE.MeshBasicMaterial({color: 0x0c0907});
 const lamps = new THREE.Group(); scene.add(lamps);
+// red lanterns hang in place of the lamps in Chinese Pool
+const lanterns = new THREE.Group(); lanterns.visible = false; scene.add(lanterns);
+{
+  const red = new THREE.MeshPhongMaterial({color: 0xd4102a, emissive: 0xb00018, emissiveIntensity: 0.9, shininess: 60});
+  const gold = new THREE.MeshPhongMaterial({color: 0xffc94d, emissive: 0x6a3c00, shininess: 100});
+  for (const [lx, lz] of [[-0.95, -0.3], [-0.32, 0.32], [0.32, -0.32], [0.95, 0.3]]) {
+    const g = new THREE.Group(); g.position.set(lx, 1.02, lz);
+    const body = new THREE.Mesh(new THREE.SphereGeometry(0.12, 20, 14), red); body.scale.y = 0.8; g.add(body);
+    for (const y of [0.1, -0.1]) { const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, 0.03, 16), gold); cap.position.y = y; g.add(cap); }
+    const tassel = new THREE.Mesh(new THREE.CylinderGeometry(0.004, 0.012, 0.14, 8), gold); tassel.position.y = -0.18; g.add(tassel);
+    const cord = new THREE.Mesh(new THREE.CylinderGeometry(0.003, 0.003, 1.4, 6), cordMat); cord.position.y = 0.8; g.add(cord);
+    lanterns.add(g);
+  }
+}
 for (const lx of [-0.62, 0.62]) {
   const shade = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.19, 0.13, 28, 1, true), shadeMat);
   shade.position.set(lx, 1.05, 0); lamps.add(shade);
@@ -623,6 +654,191 @@ const sndPocket = () => { knock('pocket', 160, 0.9, 0.28, 1.5); setTimeout(() =>
 const sndBoom = () => { knock('boom', 90, 1, 0.9, 0.7); knock('boom2', 400, 0.6, 0.4, 1); };
 const sndPower = () => { tone(440, 0.12, 0.12); setTimeout(() => tone(660, 0.12, 0.12), 90); setTimeout(() => tone(990, 0.12, 0.2), 180); };
 
+// ---------------- Chinese Pool: music, announcer, effects (only used in that mode) ----------------
+const PENTA = [293.66, 329.63, 369.99, 440, 493.88, 587.33, 659.25, 739.99, 880];   // D major pentatonic
+function voiceAt(t, freq, vol, dur, type, bend) {
+  const o = AC.createOscillator(), g = AC.createGain(), f = AC.createBiquadFilter();
+  o.type = type; o.frequency.setValueAtTime(freq * (bend || 1), t); o.frequency.exponentialRampToValueAtTime(freq, t + 0.05);
+  f.type = 'lowpass'; f.frequency.value = 2600;
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.006); g.gain.exponentialRampToValueAtTime(0.0008, t + dur);
+  o.connect(f); f.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + dur + 0.05);
+}
+function noiseAt(t, freq, q, vol, dur, type = 'bandpass') {
+  const src = AC.createBufferSource(); src.buffer = noiseBuf;
+  const f = AC.createBiquadFilter(); f.type = type; f.frequency.value = freq; f.Q.value = q;
+  const g = AC.createGain(); g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0008, t + dur);
+  src.connect(f); f.connect(g); g.connect(AC.destination); src.start(t, Math.random() * 0.5); src.stop(t + dur + 0.05);
+}
+const pluck = (t, f, v) => { voiceAt(t, f, v, 0.45, 'triangle', 1.03); voiceAt(t, f * 2, v * 0.25, 0.2, 'sawtooth', 1.02); };   // zither-ish
+const kick = (t, v) => { const o = AC.createOscillator(), g = AC.createGain(); o.frequency.setValueAtTime(140, t); o.frequency.exponentialRampToValueAtTime(45, t + 0.18);
+  g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(0.0008, t + 0.25); o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + 0.3); };
+const woodblock = (t, v) => voiceAt(t, 1250, v, 0.06, 'sine', 1.1);
+const cymbal = (t, v) => noiseAt(t, 6000, 0.6, v, 0.9, 'highpass');
+function gong(v = 0.5) {
+  if (!AC || muted) return;
+  const t = AC.currentTime;
+  [[98, 1], [151, 0.6], [207, 0.45], [263, 0.3], [412, 0.15]].forEach(([f, a]) => {
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.frequency.setValueAtTime(f * 1.02, t); o.frequency.exponentialRampToValueAtTime(f * 0.97, t + 3);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v * a, t + 0.03); g.gain.exponentialRampToValueAtTime(0.0008, t + 3.2);
+    o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + 3.3);
+  });
+  noiseAt(t, 2500, 0.8, v * 0.35, 1.6);
+}
+function firecrackers(n = 14, spread = 1.4) {
+  if (!AC || muted) return;
+  const t = AC.currentTime;
+  for (let i = 0; i < n; i++) { const at = t + Math.random() * spread; noiseAt(at, 1800 + Math.random() * 2500, 0.7, 0.55, 0.035, 'highpass'); }
+  for (let i = 0; i < 3; i++) setTimeout(() => { if (game === 'chinese') burst((Math.random() - 0.5) * 2 * L, 0.06, (Math.random() < 0.5 ? -1 : 1) * (W + 0.1), 30, 0xff2a2a, 1.2); }, i * 300);
+}
+const cnMusic = {
+  on: false, next: 0, step: 0, hype: 0, timer: 0,
+  // two four-bar phrases on the pentatonic scale; -1 is a rest
+  phrases: [[5, 4, 3, 4, 5, -1, 5, 7, 6, 5, 3, -1, 4, 3, 1, -1], [3, 4, 5, 7, 8, 7, 5, -1, 6, 5, 4, 3, 2, 1, 0, -1]],
+  start() { if (!AC) return; this.on = true; this.step = 0; this.next = AC.currentTime + 0.15; clearInterval(this.timer); this.timer = setInterval(() => this.pump(), 60); },
+  stop() { this.on = false; clearInterval(this.timer); },
+  pump() {
+    if (!this.on || !AC) return;
+    while (this.next < AC.currentTime + 0.3) {
+      const hype = this.hype > AC.currentTime;
+      if (!muted) this.play(this.step, this.next, hype);
+      this.next += 60 / (hype ? 176 : 128) / 2;   // eighth notes
+      this.step++;
+    }
+  },
+  play(i, t, hype) {
+    const ph = this.phrases[Math.floor(i / 16) % 2], n = ph[i % 16];
+    if (n >= 0) pluck(t, PENTA[n], hype ? 0.16 : 0.12);
+    if (i % 4 === 0) { kick(t, 0.35); pluck(t, PENTA[i % 16 < 8 ? 0 : 3] / 2, 0.1); }
+    if (i % 4 === 2) woodblock(t, 0.12);
+    if (i % 32 === 0) cymbal(t, 0.12);
+    if (hype) {
+      pluck(t + 0.06, PENTA[(i * 3) % 9] * 2, 0.06);
+      if (i % 2 === 1) kick(t, 0.25);
+      woodblock(t + 0.06, 0.06);
+    }
+  },
+  pump4(sec) { if (AC) this.hype = AC.currentTime + sec; }
+};
+// announcer: the phone's own Mandarin voice, pitched up for maximum drama
+let zhVoice = null;
+function pickVoice() { try { const vs = speechSynthesis.getVoices(); zhVoice = vs.find(v => /zh[-_]CN/i.test(v.lang)) || vs.find(v => /^zh/i.test(v.lang)) || null; } catch (_) {} }
+if ('speechSynthesis' in window) { pickVoice(); try { speechSynthesis.onvoiceschanged = pickVoice; } catch (_) {} }
+function announce(text, pitch = 1.6, rate = 1.15) {
+  if (game !== 'chinese' || muted || !('speechSynthesis' in window)) return;
+  try {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'zh-CN'; if (zhVoice) u.voice = zhVoice; u.pitch = pitch; u.rate = rate; u.volume = 1;
+    speechSynthesis.speak(u);
+  } catch (_) {}
+}
+// 3D effects
+const fxRingGeo = new THREE.RingGeometry(0.86, 1, 56);
+const fxRings = [0, 1, 2, 3, 4, 5, 6, 7].map(() => {
+  const m = new THREE.Mesh(fxRingGeo, new THREE.MeshBasicMaterial({color: 0xffd34d, transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending}));
+  m.rotation.x = -Math.PI / 2; m.visible = false; m.userData = {t: 0, life: 1, max: 1}; scene.add(m); return m;
+});
+let ringNext = 0;
+function shockwave(x, z, color, maxR, life = 0.6) {
+  const m = fxRings[ringNext]; ringNext = (ringNext + 1) % fxRings.length;
+  m.material.color.setHex(color); m.position.set(x, 0.012, z); m.userData = {t: 0, life, max: maxR}; m.visible = true;
+}
+const boomMesh = new THREE.Mesh(new THREE.SphereGeometry(1, 24, 16), new THREE.MeshBasicMaterial({color: 0xff8a1f, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending}));
+boomMesh.visible = false; scene.add(boomMesh);
+let boomT = -1;
+const ghostGeo = new THREE.SphereGeometry(R, 12, 8);
+const ghosts = Array.from({length: 48}, () => {
+  const m = new THREE.Mesh(ghostGeo, new THREE.MeshBasicMaterial({color: 0xffffff, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending}));
+  m.visible = false; m.userData = {t: 1}; scene.add(m); return m;
+});
+let ghostNext = 0, ghostClock = 0;
+function afterimage(b, color) {
+  const m = ghosts[ghostNext]; ghostNext = (ghostNext + 1) % ghosts.length;
+  m.material.color.setHex(color); m.position.set(b.x, b.y, b.z); m.scale.setScalar(b.r / R); m.userData.t = 0; m.visible = true;
+}
+let timeScale = 1, slowT = 0, fovKick = 0, baseFov = 50;
+const slowmo = sec => { slowT = Math.max(slowT, sec); };
+function tint(color, ms) {
+  const el = $('fxtint'); el.style.setProperty('--tint', color); el.classList.add('on');
+  clearTimeout(tint.t); tint.t = setTimeout(() => el.classList.remove('on'), ms);
+}
+function speedLines(ms) { const el = $('fxlines'); el.classList.add('on'); clearTimeout(speedLines.t); speedLines.t = setTimeout(() => el.classList.remove('on'), ms); }
+const popV = new THREE.Vector3();
+function popScore(x, z, text) {
+  popV.set(x, 0.05, z).project(camera);
+  if (popV.z > 1) return;
+  const el = document.createElement('div'); el.className = 'pop'; el.textContent = text;
+  el.style.left = ((popV.x + 1) / 2 * innerWidth) + 'px'; el.style.top = ((1 - popV.y) / 2 * innerHeight) + 'px';
+  $('pops').appendChild(el); setTimeout(() => el.remove(), 950);
+}
+function clearCnFx() {
+  cnMusic.stop();
+  try { if ('speechSynthesis' in window) speechSynthesis.cancel(); } catch (_) {}
+  $('fxtint').classList.remove('on'); $('fxlines').classList.remove('on'); $('pops').innerHTML = '';
+  slowT = 0; timeScale = 1; fovKick = 0;
+}
+const POWER_FX = {
+  sword: {arm: '巨剑', say: '看我的巨剑!', tint: '#ffb000'},
+  bomb: {arm: '炸弹', say: '炸弹来了!', tint: '#ff3b00'},
+  hole: {arm: '黑洞', say: '黑洞, 吞噬一切!', tint: '#7a1fd6'},
+  split: {arm: '分身术', say: '影分身之术!', tint: '#2f8cff'},
+  fire: {arm: '火球', say: '火球术!', tint: '#ff4a00'},
+  laser: {arm: '激光', say: '激光瞄准!', tint: '#ff1a4a'}
+};
+function powerFx(id) {
+  const f = POWER_FX[id];
+  announce(f.say); gong(id === 'laser' ? 0.25 : 0.5); cnMusic.pump4(id === 'hole' ? 7 : 4);
+  tint(f.tint, id === 'hole' ? 5000 : id === 'fire' ? 3500 : 1400);
+  speedLines(900); fovKick = 10; shake = Math.max(shake, 0.02);
+  shockwave(cue.x, cue.z, parseInt(f.tint.slice(1), 16), 0.6, 0.7);
+  if (id === 'split') { slowmo(0.5); shockwave(cue.x, cue.z, 0xffffff, 0.35, 0.5); }
+  if (id === 'fire') { firecrackers(10, 0.8); }
+}
+function swordImpact(c) {
+  slowmo(0.7); fovKick = 14; shake = 0.04; speedLines(800); flash();
+  shockwave(c.x, c.z, 0xffd34d, 0.9, 0.8); shockwave(c.x, c.z, 0xffffff, 0.5, 0.5);
+  burst(c.x, 0.06, c.z, 120, 0xffd34d, 2); sndBoom(); announce('斩!', 1.3, 1.2);
+}
+function updateFx(dt, sdt) {
+  for (const m of fxRings) {
+    if (!m.visible) continue;
+    const u = m.userData; u.t += sdt; const k = u.t / u.life;
+    if (k >= 1) { m.visible = false; continue; }
+    m.scale.setScalar(0.02 + u.max * (1 - Math.pow(1 - k, 3))); m.material.opacity = (1 - k) * 0.95;
+  }
+  if (boomT >= 0) {
+    boomT += sdt; const k = boomT / 0.55;
+    if (k >= 1) { boomT = -1; boomMesh.visible = false; }
+    else { boomMesh.scale.setScalar(0.03 + 0.45 * Math.sqrt(k)); boomMesh.material.opacity = 1 - k; boomMesh.material.color.setHSL(0.08 - k * 0.07, 1, 0.6 - k * 0.2); }
+  }
+  for (const m of ghosts) {
+    if (!m.visible) continue;
+    m.userData.t += sdt * 2.5;
+    if (m.userData.t >= 1) { m.visible = false; continue; }
+    m.material.opacity = 0.55 * (1 - m.userData.t);
+  }
+  if (game !== 'chinese') return;
+  // trails and swirling particles while a power shot is running
+  if (shot && phase === 'moving' && shot.power) {
+    ghostClock += sdt;
+    if (ghostClock > 0.03) {
+      ghostClock = 0;
+      const col = {sword: 0xffd34d, fire: 0xff5a1f, split: 0x6fc3ff, bomb: 0xff8a1f, hole: 0xb04dff, laser: 0xff3355}[shot.power];
+      for (const b of balls) if (onTable(b) && (b.kind === 'cue' || b.kind === 'clone') && (b.vx || b.vz)) afterimage(b, col);
+    }
+    if (shot.power === 'hole' && shot.time < 7) {
+      for (const pk of POCKETS) for (let i = 0; i < 2; i++) {
+        const a = Math.random() * Math.PI * 2, r = 0.25 + Math.random() * 0.25, j = sparkNext; sparkNext = (sparkNext + 1) % SPARKS;
+        sparkPos[j * 3] = pk.x + Math.cos(a) * r; sparkPos[j * 3 + 1] = 0.03; sparkPos[j * 3 + 2] = pk.z + Math.sin(a) * r;
+        sparkVel[j * 3] = -Math.cos(a) * r * 2.2 - Math.sin(a) * 1.2; sparkVel[j * 3 + 1] = 0.6; sparkVel[j * 3 + 2] = -Math.sin(a) * r * 2.2 + Math.cos(a) * 1.2;
+        sparkCol[j * 3] = 0.7; sparkCol[j * 3 + 1] = 0.3; sparkCol[j * 3 + 2] = 1; sparkLife[j] = 0.45;
+      }
+    }
+  }
+  laserLines.forEach((l, i) => { l.material.opacity = 0.55 + 0.4 * Math.sin(clockT * 18 + i); l.scale.z = 0.012; });
+}
+
 // ---------------- game state ----------------
 const MODE_NAMES = {cpu: 'You vs CPU', pvp: '2 Players', practice: 'Practice', online: 'Online'};
 let game = '8';                   // '8' | '9' | 'chinese'
@@ -746,7 +962,7 @@ function pocketBall(b) {
   sndPocket();
   if (game === 'chinese') {
     burst(b.pocket.x, 0.04, b.pocket.z, 26, b.kind === 'cue' ? 0xff4040 : 0xffc94d, 1.1);
-    if (b.kind === 'crowd') chineseScore();
+    if (b.kind === 'crowd') chineseScore(b);
   }
 }
 function explode(cx, cz) {
@@ -761,6 +977,9 @@ function explode(cx, cz) {
   cue.vx *= 0.1; cue.vz *= 0.1;
   burst(cx, 0.05, cz, 160, 0xff7a1f, 2.2); burst(cx, 0.05, cz, 80, 0xfff1a8, 1.4);
   shake = 0.05; flash(); sndBoom();
+  boomMesh.position.set(cx, 0.04, cz); boomT = 0; boomMesh.visible = true;
+  shockwave(cx, cz, 0xff8a1f, 0.9, 0.7); shockwave(cx, cz, 0xffffff, 0.55, 0.45);
+  slowmo(0.8); fovKick = 16; gong(0.6); firecrackers(18, 1.6); announce('炸裂!', 1.2, 1.1); tint('#ff2a00', 1600);
 }
 function collide(a, b) {
   const dx = b.x - a.x, dz = b.z - a.z, d2 = dx * dx + dz * dz, rr = a.r + b.r;
@@ -770,7 +989,7 @@ function collide(a, b) {
   const c = a.kind === 'cue' ? a : b.kind === 'cue' ? b : null;
   const o = c === a ? b : a;
   if (c && shot) {
-    if (shot.first === null) shot.first = o.kind === 'crowd' ? -1 : o.n;
+    if (shot.first === null) { shot.first = o.kind === 'crowd' ? -1 : o.n; if (shot.power === 'sword') swordImpact(c); }
     if (shot.power === 'bomb' && !shot.exploded) { explode(c.x, c.z); return; }
     if (shot.power === 'fire') {
       if (!o.fired) {
@@ -1028,8 +1247,8 @@ function newRack(keepBalls) {
     try { cn.best = +localStorage.getItem('cp-cn-best') || 0; } catch (_) { cn.best = 0; }
   }
   startTurn();
-  if (game === 'chinese') combo('暴力台球', 'CHINESE POOL · 12 shots · sink everything');
-  else say(players.length > 1 ? `${players[cur].name} ${isYou(players[cur]) ? 'break' : 'to break'}` : 'Break the rack', 'good', 1600);
+  if (game === 'chinese') { combo('暴力台球', 'CHINESE POOL · 12 shots · sink everything'); announce('欢迎来到, 暴力台球!', 1.5, 1.05); gong(0.5); cnMusic.start(); }
+  else { clearCnFx(); say(players.length > 1 ? `${players[cur].name} ${isYou(players[cur]) ? 'break' : 'to break'}` : 'Break the rack', 'good', 1600); }
 }
 function aimAtTarget() {
   const ns = legalTargets(cur);
@@ -1071,6 +1290,7 @@ function strike() {
     cn.charges[shot.power]--; cn.armed = null; sndPower();
     const P = POWERS.find(p => p.id === shot.power);
     combo(P.glyph + '!', P.name.toUpperCase());
+    powerFx(shot.power);
     if (shot.power === 'split') {
       [-0.26, -0.13, 0.13, 0.26].forEach((da, i) => {
         const c = makeBall(0, 'clone', cloneMeshes[i]);
@@ -1188,26 +1408,35 @@ function toMenu() {
   phase = 'menu'; shot = null; cpu = null; restState = null;
   if (balls.length) restoreCueBall();
   document.body.classList.remove('cn');
+  clearCnFx();
   ui.menu.hidden = false; ui.over.hidden = true; ui.top.hidden = true;
   renderControls();
 }
 
 // ---------------- Chinese Pool scoring ----------------
 const CN_WORDS = [[25, '神之一击', 'GODLIKE'], [15, '无敌', 'UNSTOPPABLE'], [8, '暴力', 'BRUTAL'], [4, '好球', 'NICE SHOT'], [2, '连击', 'COMBO']];
-function chineseScore() {
+function chineseScore(b) {
   if (!shot) return;
   shot.streak = (shot.streak || 0) + 1;
   cn.score += 10 * shot.streak;
   renderHUD();
+  const pk = b.pocket || b;
+  popScore(pk.x, pk.z, `+${10 * shot.streak}`);
   const w = CN_WORDS.find(x => shot.streak >= x[0]);
-  if (w && (shot.streak === w[0] || shot.streak % 5 === 0)) { combo(w[1], `${w[2]} ×${shot.streak}`); shake = Math.max(shake, 0.012); }
+  if (w && (shot.streak === w[0] || shot.streak % 5 === 0)) {
+    combo(w[1], `${w[2]} ×${shot.streak}`); shake = Math.max(shake, 0.012);
+    announce(w[1] + '!', 1.5 + Math.min(shot.streak, 25) * 0.02, 1.2);
+    shockwave(pk.x, pk.z, 0xffd34d, 0.5, 0.6);
+    if (shot.streak >= 8) { firecrackers(8 + Math.min(shot.streak, 30), 1.2); cnMusic.pump4(3); }
+    if (shot.streak >= 15) { tint('#ffb000', 1200); speedLines(900); fovKick = Math.max(fovKick, 8); }
+  }
 }
 function endChinese(s) {
   const sunk = s.potted.filter(n => n === -1).length;
   if (s.potted.includes(0)) {
     cn.score = Math.max(0, cn.score - 50);
     const sp = freeSpot(-L / 2, 0, cue, -1); resetBall(cue, sp.x, sp.z);
-    say('Scratch! −50', 'foul', 1600);
+    say('Scratch! −50', 'foul', 1600); announce('哎呀!', 1.9, 1);
   }
   if (sunk >= 5) {   // big shots earn a random ability
     const p = POWERS[Math.floor(Math.random() * POWERS.length)];
@@ -1221,6 +1450,8 @@ function endChinese(s) {
     if (best) { cn.best = cn.score; try { localStorage.setItem('cp-cn-best', String(cn.score)); } catch (_) {} }
     phase = 'over'; renderHUD(); renderControls();
     setTimeout(() => {
+      announce(left === 0 ? '清台! 太强了!' : best ? '新纪录!' : '游戏结束!', 1.5, 1.05);
+      if (left === 0 || best) { gong(0.6); firecrackers(30, 2.5); }
       $('overtitle').textContent = left === 0 ? '清台! Table cleared' : `${cn.score.toLocaleString()} points`;
       $('oversub').textContent = `${120 - left} of 120 balls sunk. ${best ? 'New best!' : `Best: ${cn.best.toLocaleString()}`}`;
       ui.over.hidden = false;
@@ -1532,7 +1763,7 @@ ui.powers.addEventListener('click', e => {
   const id = b.dataset.pw;
   if (!(cn.charges[id] > 0)) return;
   cn.armed = cn.armed === id ? null : id;
-  if (cn.armed) { const P = POWERS.find(p => p.id === id); say(`${P.glyph} ${P.name}: ${P.tip}`, 'good', 1800); tone(700, 0.1, 0.1); }
+  if (cn.armed) { const P = POWERS.find(p => p.id === id); say(`${P.glyph} ${P.name}: ${P.tip}`, 'good', 1800); tone(700, 0.1, 0.1); announce(POWER_FX[id].arm + '!', 1.7, 1.2); }
   renderPowers();
 });
 
@@ -1547,6 +1778,7 @@ $('viewbtn').addEventListener('click', () => { viewMode = viewMode === 'cue' ? '
 $('menubtn').addEventListener('click', toMenu);
 $('soundbtn').addEventListener('click', () => {
   audioInit(); muted = !muted;
+  if (muted) { try { speechSynthesis.cancel(); } catch (_) {} }
   $('sw').style.opacity = muted ? 0.15 : 1;
   $('soundbtn').setAttribute('aria-label', muted ? 'Sound off' : 'Sound on');
 });
@@ -1668,7 +1900,7 @@ function resize() {
   const w = innerWidth, h = innerHeight;
   renderer.setSize(w, h, false);
   camera.aspect = w / h;
-  camera.fov = camera.aspect < 1 ? 58 : 46;
+  camera.fov = baseFov = camera.aspect < 1 ? 58 : 46;
   camera.updateProjectionMatrix();
   computeFits();
   renderPower();
@@ -1708,6 +1940,9 @@ function drawGuide(dx, dz) {
 }
 function update(dt) {
   clockT += dt;
+  slowT = Math.max(0, slowT - dt);
+  timeScale += ((slowT > 0 ? 0.22 : 1) - timeScale) * Math.min(1, dt * 10);
+  const sdt = dt * timeScale;   // slow motion only ever kicks in from Chinese Pool effects
   for (const b of balls) { b.px = b.x; b.pz = b.z; }
 
   if (phase === 'aim' && fineDir) {
@@ -1719,9 +1954,9 @@ function update(dt) {
 
   if (phase === 'stroke') { strokeT += dt; if (strokeT >= 0.08) strike(); }
   if (phase === 'moving') {
-    acc += dt; let n = 0;
+    acc += sdt; let n = 0;
     while (acc >= H && n < 80) { physStep(H); acc -= H; n++; }
-    shot.time += dt;
+    shot.time += sdt;
     if (shot.time > 30) for (const b of balls) { b.vx = 0; b.vz = 0; }
     if (shot.power === 'fire' && onTable(cue) && (cue.vx || cue.vz)) burst(cue.x, 0.03, cue.z, 2, Math.random() < 0.5 ? 0xff5a1f : 0xffc94d, 0.35);
   } else acc = 0;
@@ -1732,8 +1967,8 @@ function update(dt) {
   let ci = 0;
   for (const b of balls) {
     if (b.state === 'sinking') {
-      b.sinkT += dt;
-      const k = Math.min(1, b.sinkT / 0.35), f = Math.min(1, dt * 14);
+      b.sinkT += sdt;
+      const k = Math.min(1, b.sinkT / 0.35), f = Math.min(1, sdt * 14);
       b.x += (b.pocket.x - b.x) * f; b.z += (b.pocket.z - b.z) * f;
       b.y = b.r - k * 0.1;
       if (k >= 1) { b.state = 'gone'; if (b.mesh) b.mesh.visible = false; b.vx = b.vz = 0; renderHUD(); }
@@ -1771,7 +2006,8 @@ function update(dt) {
     obj.position.set(cue.x - dz * spinX * R * 0.6, R + spinY * R * 0.6, cue.z + dx * spinX * R * 0.6).addScaledVector(tipDir, -(R + gap));
   }
 
-  updateSparks(dt);
+  updateSparks(sdt);
+  updateFx(dt, sdt);
 
   // camera
   const rate = desiredCamera(clockT);
@@ -1783,7 +2019,13 @@ function update(dt) {
     shake *= Math.exp(-dt * 6);
   }
   camera.lookAt(camLook);
-  lamps.visible = camPos.y < 0.9;   // keep the shades out of high overhead views
+  if (fovKick > 0.05 || camera.fov !== baseFov) {
+    fovKick *= Math.exp(-dt * 4);
+    camera.fov = baseFov + (fovKick > 0.05 ? fovKick : 0); camera.updateProjectionMatrix();
+  }
+  lamps.visible = camPos.y < 0.9 && game !== 'chinese';   // keep the shades out of high overhead views
+  lanterns.visible = camPos.y < 0.9 && game === 'chinese';
+  if (lanterns.visible) lanterns.children.forEach((g, i) => { g.rotation.z = Math.sin(clockT * 1.3 + i) * 0.06; });
 }
 function frame(now) {
   requestAnimationFrame(frame);
