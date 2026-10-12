@@ -79,7 +79,7 @@ button:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 #spinpad::before,#spinpad::after{content:"";position:absolute;background:rgba(20,15,11,.25)}
 #spinpad::before{left:50%;top:8px;bottom:8px;width:1px}
 #spinpad::after{top:50%;left:8px;right:8px;height:1px}
-#spindot{position:absolute;width:14px;height:14px;border-radius:50%;background:var(--foul);left:24px;top:24px;box-shadow:0 0 0 2px rgba(255,255,255,.7);transition:top .12s}
+#spindot{position:absolute;width:14px;height:14px;border-radius:50%;background:var(--foul);left:24px;top:24px;box-shadow:0 0 0 2px rgba(255,255,255,.7);transition:transform .1s;pointer-events:none}
 .cap{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-dim);text-align:center;white-space:nowrap}
 #mid{display:flex;gap:8px;align-items:center;padding-bottom:6px}
 .pill{border:1px solid var(--line);background:var(--glass);border-radius:16px;height:50px;min-width:50px;padding:0 14px;display:grid;place-items:center;font:600 15px/1 var(--display);touch-action:none}
@@ -105,6 +105,49 @@ button:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 .big.alt small{color:var(--ink-dim)}
 .how{list-style:none;margin:4px 0 0;padding:12px 14px;border-radius:16px;background:var(--glass);border:1px solid var(--line);text-align:left;display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--ink-dim)}
 .how b{color:var(--ink)}
+.linkbox{display:flex;flex-direction:column;gap:10px}
+.linkbox input{width:100%;box-sizing:border-box;font:700 14px/1.2 var(--body);color:var(--ink);background:var(--glass);border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center;-webkit-user-select:all;user-select:all}
+.rackart{cursor:pointer;flex-wrap:wrap}
+.rackart .mb{width:18px;height:18px}
+.rackart .mb i{width:10px;height:10px;font-size:8px}
+.rackart.tap{animation:wiggle .25s}
+@keyframes wiggle{50%{transform:scale(1.06) rotate(-1deg)}}
+.pl b .mb.tiny{width:15px;height:15px;margin-left:6px;vertical-align:-2px}
+.pl b .mb.tiny i{width:8px;height:8px;font-size:0}
+#tray.eight{gap:2px;padding:4px 6px}
+#tray.eight .mb{width:17px;height:17px}
+#tray.eight .mb i{width:9px;height:9px;font-size:7px}
+#target .pair{display:flex;gap:2px}
+#target .pair .mb{width:20px;height:20px}
+#target .count{font:700 20px/1 var(--display);font-style:normal;color:var(--ink);font-variant-numeric:tabular-nums}
+.seg{display:flex;gap:4px;padding:4px;border-radius:16px;background:var(--glass);border:1px solid var(--line)}
+.seg button{flex:1;border:0;border-radius:12px;padding:10px;background:transparent;font:600 16px/1 var(--display);color:var(--ink-dim)}
+.seg button[aria-pressed="true"]{background:var(--brass);color:var(--room)}
+.big.cn{background:linear-gradient(135deg,#c8102e,#8a0a1f);color:#ffd970;box-shadow:0 4px 0 #4a0510;border:1px solid #ffd970}
+.big.cn small{color:#ffe9a8}
+#powers{position:fixed;left:calc(env(safe-area-inset-left,0px) + 12px);top:calc(env(safe-area-inset-top,0px) + 120px);display:flex;flex-direction:column;gap:6px}
+.pw{position:relative;width:54px;height:50px;border-radius:14px;border:1px solid #ffd970;background:linear-gradient(160deg,#c8102e,#5c0613);color:#ffd970;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:0;box-shadow:0 3px 0 #3a030b}
+.pw b{font:700 20px/1 system-ui,"PingFang SC","Noto Sans SC",sans-serif}
+.pw small{font:700 8px/1 var(--body);letter-spacing:.04em;text-transform:uppercase;color:#ffe9a8}
+.pw i{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;border-radius:9px;background:#ffd970;color:#5c0613;font:800 11px/18px var(--body);font-style:normal}
+.pw:disabled{opacity:.3;filter:grayscale(.8)}
+.pw.armed{background:linear-gradient(160deg,#ffd970,#ff8a00);color:#5c0613;transform:scale(1.08);box-shadow:0 0 18px #ffb000}
+.pw.armed small{color:#5c0613}
+#combo{position:fixed;left:50%;top:30%;transform:translate(-50%,-50%) scale(.6);text-align:center;pointer-events:none;opacity:0;display:flex;flex-direction:column;align-items:center;gap:4px}
+#combo b{font:900 clamp(48px,16vw,84px)/1 system-ui,"PingFang SC","Noto Sans SC",sans-serif;color:#ffd970;-webkit-text-stroke:2px #8a0a1f;text-shadow:0 5px 0 #8a0a1f,0 0 30px #ff5a1f;white-space:nowrap}
+#combo small{font:700 15px/1 var(--display);letter-spacing:.12em;color:#fff;text-shadow:0 2px 6px #000}
+#combo.show{animation:pop 1.4s ease-out forwards}
+@keyframes pop{0%{opacity:0;transform:translate(-50%,-50%) scale(2.4) rotate(-6deg)}15%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(-3deg)}75%{opacity:1;transform:translate(-50%,-50%) scale(1.05) rotate(-3deg)}100%{opacity:0;transform:translate(-50%,-60%) scale(1.1) rotate(-3deg)}}
+#groups{position:fixed;left:50%;top:44%;transform:translate(-50%,-50%);display:flex;flex-direction:column;gap:8px;pointer-events:none;opacity:0;transition:opacity .3s}
+#groups.show{opacity:1}
+#groups div{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:14px;background:var(--glass);border:1px solid var(--brass);white-space:nowrap}
+#groups b{font:600 17px/1 var(--display);margin-left:4px}
+#groups span{font:700 12px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--brass);margin-left:auto;padding-left:10px}
+#flash{position:fixed;inset:0;background:#fff3d0;opacity:0;pointer-events:none}
+#flash.go{animation:flash .5s ease-out}
+@keyframes flash{0%{opacity:.85}100%{opacity:0}}
+body.cn .pl.on{border-color:#ffd970;box-shadow:0 0 0 2px rgba(200,16,46,.5)}
 @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
 @media (max-height:500px){
   .overlay{place-items:start center}
@@ -129,6 +172,11 @@ button:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
     <div id="tray"></div>
   </div>
 
+  <div id="powers" hidden></div>
+  <div id="combo"></div>
+  <div id="groups"></div>
+  <div id="flash"></div>
+
   <div id="msg"></div>
 
   <div id="power" hidden aria-label="Power: pull down and release to shoot">
@@ -142,8 +190,8 @@ button:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 
   <div id="bottom" hidden>
     <div id="spin">
-      <div id="spinpad" aria-label="Spin: tap high for follow, low for draw"><div id="spindot"></div></div>
-      <div class="cap" id="spincap">Spin: none</div>
+      <div id="spinpad" aria-label="Spin: touch where the cue should hit the ball"><div id="spindot"></div></div>
+      <div class="cap" id="spincap">Center ball</div>
     </div>
     <div id="mid">
       <button class="pill" id="left" aria-label="Fine aim left"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
@@ -158,16 +206,35 @@ button:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
     <div class="card">
       <div class="rackart" id="rackart"></div>
       <h1>Corner Pocket</h1>
-      <p class="sub">Nine-ball in a 3D pool hall</p>
+      <p class="sub">Pool in a 3D pool hall</p>
+      <div class="seg" role="group" aria-label="Game">
+        <button data-game="8" aria-pressed="true">8-Ball</button>
+        <button data-game="9" aria-pressed="false">9-Ball</button>
+      </div>
+      <button class="big cn" data-mode="chinese" id="cnbtn" hidden>中式台球 Chinese Pool<small>Power-ups. 120 balls. No mercy.</small></button>
       <button class="big" data-mode="cpu">Play the CPU<small>You break first</small></button>
       <button class="big alt" data-mode="pvp">2 Players<small>Pass the phone between shots</small></button>
+      <button class="big alt" id="onlinebtn">Play online<small>Send a friend a link and play on two phones</small></button>
       <button class="big alt" data-mode="practice">Practice<small>Clear the rack in as few shots as you can</small></button>
       <ul class="how">
         <li><b>Aim:</b> drag across the table. Use the arrows for fine aim.</li>
         <li><b>Shoot:</b> pull the bar on the right down, then let go.</li>
-        <li><b>Spin:</b> tap the top of the cue ball for follow, the bottom for draw.</li>
-        <li><b>Rules:</b> always hit the lowest number first. Sink the 9 to win.</li>
+        <li><b>Spin:</b> touch anywhere on the little cue ball: high for follow, low for draw, left or right for english.</li>
+        <li id="rulesline"><b>Rules:</b> sink a ball to claim solids or stripes. Clear your group, then sink the 8.</li>
       </ul>
+    </div>
+  </div>
+
+  <div class="overlay" id="online" hidden>
+    <div class="card">
+      <h2 id="ontitle">Play online</h2>
+      <p class="sub" id="onsub">Setting up your table…</p>
+      <div class="linkbox" id="linkrow" hidden>
+        <input id="roomlink" readonly aria-label="Game link">
+        <button class="big" id="sharebtn">Send link</button>
+      </div>
+      <p class="sub" id="onwait" hidden>Waiting for your friend to open the link. Keep this screen open.</p>
+      <button class="big alt" id="oncancel">Cancel</button>
     </div>
   </div>
 
@@ -182,6 +249,7 @@ button:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
 (() => {
 'use strict';
@@ -199,7 +267,8 @@ const DA = 0.35, DB = 0.18;    // rolling decel: a = DA + DB*v
 const MAXV = 5.2, MINV = 0.25;
 const H = 1 / 600;             // physics step
 
-const COLORS = {0:'#f7f3e8',1:'#f5c518',2:'#1f4fd1',3:'#d62a2a',4:'#6a2bb5',5:'#f07a12',6:'#178a3f',7:'#7a1f24',8:'#151515',9:'#f5c518'};
+const COLORS = {0:'#f7f3e8',1:'#f5c518',2:'#1f4fd1',3:'#d62a2a',4:'#6a2bb5',5:'#f07a12',6:'#178a3f',7:'#7a1f24',8:'#151515',
+  9:'#f5c518',10:'#1f4fd1',11:'#d62a2a',12:'#6a2bb5',13:'#f07a12',14:'#178a3f',15:'#7a1f24'};
 const POCKETS = [
   {x:-L-0.03,z:-W-0.03,r:0.078},{x:L+0.03,z:-W-0.03,r:0.078},
   {x:-L-0.03,z:W+0.03,r:0.078},{x:L+0.03,z:W+0.03,r:0.078},
@@ -380,14 +449,15 @@ for (const lx of [-0.62, 0.62]) {
 }
 
 // ---------------- balls ----------------
+const IVORY = '#f7f3e8';
 function ballTex(n) {
   return canvasTex(512, 256, (g, w, h) => {
-    const col = COLORS[n], stripe = n >= 9, ivory = '#f7f3e8';
+    const col = COLORS[n], stripe = n >= 9, ivory = IVORY;
     g.fillStyle = stripe ? ivory : col; g.fillRect(0, 0, w, h);
     if (stripe) { g.fillStyle = col; g.fillRect(0, h * 0.27, w, h * 0.46); }
     if (n === 0) {
       g.fillStyle = '#c7302a';
-      for (const [u, v] of [[0.25, 0.5], [0.75, 0.5], [0, 0.5], [0.5, 0.5], [1, 0.5]]) { g.beginPath(); g.arc(u * w, v * h, 7, 0, Math.PI * 2); g.fill(); }
+      for (const u of [0, 0.25, 0.5, 0.75, 1]) { g.beginPath(); g.arc(u * w, h / 2, 7, 0, Math.PI * 2); g.fill(); }
       return;
     }
     for (const cx of [w * 0.25, w * 0.75]) {
@@ -398,22 +468,45 @@ function ballTex(n) {
   });
 }
 const ballGeo = new THREE.SphereGeometry(R, 32, 20);
-const balls = [];
-for (let n = 0; n <= 9; n++) {
-  const mesh = new THREE.Mesh(ballGeo, new THREE.MeshPhongMaterial({map: ballTex(n), shininess: 90, specular: 0x666666}));
-  mesh.castShadow = true; scene.add(mesh);
-  balls.push({n, x:0, z:0, y:R, vx:0, vz:0, px:0, pz:0, state:'table', sinkT:0, pocket:null, mesh});
+const ballMats = {};
+const matFor = n => ballMats[n] || (ballMats[n] = new THREE.MeshPhongMaterial({map: ballTex(n), shininess: 90, specular: 0x666666}));
+const meshPool = {};              // one mesh per numbered ball, reused between racks
+function numberedMesh(n) {
+  if (!meshPool[n]) { const m = new THREE.Mesh(ballGeo, matFor(n)); m.castShadow = true; scene.add(m); meshPool[n] = m; }
+  return meshPool[n];
 }
-const cue = balls[0];
+// Chinese Pool fills the table with plain black balls, drawn as one instanced mesh.
+const CROWD_MAX = 160;
+const crowdMesh = new THREE.InstancedMesh(new THREE.SphereGeometry(R, 18, 12),
+  new THREE.MeshPhongMaterial({color: 0x101010, shininess: 110, specular: 0x777777}), CROWD_MAX);
+crowdMesh.castShadow = true; crowdMesh.count = 0; scene.add(crowdMesh);
+const cloneMat = new THREE.MeshPhongMaterial({color: 0xbfe6ff, emissive: 0x3a7bd5, shininess: 120, transparent: true, opacity: 0.8});
+const cloneMeshes = [0, 1, 2, 3].map(() => { const m = new THREE.Mesh(ballGeo, cloneMat); m.visible = false; scene.add(m); return m; });
 
-// ---------------- guide, ghost, cue stick ----------------
+let balls = [], cue = null;
+function makeBall(n, kind, mesh, idx) {
+  return {n, kind, r: R, m: 1, x: 0, z: 0, y: R, vx: 0, vz: 0, px: 0, pz: 0, side: 0, state: 'table', sinkT: 0, pocket: null,
+          mesh, idx, q: new THREE.Quaternion(), fired: false};
+}
+function setupBalls(numbers, crowd) {
+  for (const k in meshPool) meshPool[k].visible = false;
+  cloneMeshes.forEach(m => { m.visible = false; });
+  balls = numbers.map(n => { const b = makeBall(n, n === 0 ? 'cue' : 'num', numberedMesh(n)); b.mesh.visible = true; return b; });
+  for (let i = 0; i < (crowd || 0); i++) balls.push(makeBall(8, 'crowd', null, i));
+  crowdMesh.count = crowd || 0;
+  cue = balls[0];
+}
+const ballByN = n => balls.find(b => b.n === n && b.kind === 'num');
+
+// ---------------- guide, ghost, cue stick, sword ----------------
 const stripGeo = new THREE.PlaneGeometry(1, 1); stripGeo.rotateX(-Math.PI / 2);
 function strip(color, opacity) {
-  const m = new THREE.Mesh(stripGeo, new THREE.MeshBasicMaterial({color, transparent:true, opacity, depthWrite:false}));
-  m.renderOrder = 2; scene.add(m); return m;
+  const m = new THREE.Mesh(stripGeo, new THREE.MeshBasicMaterial({color, transparent: true, opacity, depthWrite: false}));
+  m.renderOrder = 2; m.visible = false; scene.add(m); return m;
 }
 const aimLine = strip(0xffffff, 0.55), objLine = strip(0xe6b85c, 0.75), cueLine = strip(0x5fb2e6, 0.6);
-const ghost = new THREE.Mesh(ballGeo, new THREE.MeshBasicMaterial({color:0xffffff, transparent:true, opacity:0.28, depthWrite:false}));
+const laserLines = [0, 1, 2, 3].map(() => strip(0xff3355, 0.8));
+const ghost = new THREE.Mesh(ballGeo, new THREE.MeshBasicMaterial({color: 0xffffff, transparent: true, opacity: 0.28, depthWrite: false}));
 scene.add(ghost);
 function setStrip(m, x1, z1, x2, z2, w, y = 0.0015) {
   const dx = x2 - x1, dz = z2 - z1, len = Math.hypot(dx, dz);
@@ -426,17 +519,72 @@ function setStrip(m, x1, z1, x2, z2, w, y = 0.0015) {
 const cueStick = new THREE.Group();
 {
   const shaftLen = 1.42;
-  const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.0062, 0.0105, shaftLen * 0.62, 16), new THREE.MeshPhongMaterial({color:0xe9c98f, shininess:60}));
+  const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.0062, 0.0105, shaftLen * 0.62, 16), new THREE.MeshPhongMaterial({color: 0xe9c98f, shininess: 60}));
   shaft.position.y = -0.037 - shaftLen * 0.31; cueStick.add(shaft);
-  const butt = new THREE.Mesh(new THREE.CylinderGeometry(0.0105, 0.0145, shaftLen * 0.38, 16), new THREE.MeshPhongMaterial({map: woodTex('#3b1a0c', '#000000'), shininess:70}));
+  const butt = new THREE.Mesh(new THREE.CylinderGeometry(0.0105, 0.0145, shaftLen * 0.38, 16), new THREE.MeshPhongMaterial({map: woodTex('#3b1a0c', '#000000'), shininess: 70}));
   butt.position.y = -0.037 - shaftLen * 0.62 - shaftLen * 0.19; cueStick.add(butt);
-  const ferrule = new THREE.Mesh(new THREE.CylinderGeometry(0.0062, 0.0062, 0.025, 16), new THREE.MeshPhongMaterial({color:0xfaf7ef, shininess:80}));
-  ferrule.position.y = -0.012 - 0.0125; cueStick.add(ferrule);
-  const tip = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.0062, 0.012, 16), new THREE.MeshPhongMaterial({color:0x3f86c7}));
+  const ferrule = new THREE.Mesh(new THREE.CylinderGeometry(0.0062, 0.0062, 0.025, 16), new THREE.MeshPhongMaterial({color: 0xfaf7ef, shininess: 80}));
+  ferrule.position.y = -0.0245; cueStick.add(ferrule);
+  const tip = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.0062, 0.012, 16), new THREE.MeshPhongMaterial({color: 0x3f86c7}));
   tip.position.y = -0.006; cueStick.add(tip);
   cueStick.traverse(o => { if (o.isMesh) o.castShadow = true; });
 }
 scene.add(cueStick);
+// The giant sword that replaces the cue for the Sword ability (pointing down local -y, tip at the origin)
+const sword = new THREE.Group();
+{
+  const gold = new THREE.MeshPhongMaterial({color: 0xffc94d, emissive: 0x7a3d00, shininess: 120, specular: 0xffffff});
+  const steel = new THREE.MeshPhongMaterial({color: 0xffe2b0, emissive: 0xff5a1f, emissiveIntensity: 0.55, shininess: 140, specular: 0xffffff});
+  const blade = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.9, 0.018), steel); blade.position.y = -0.45 - 0.04; sword.add(blade);
+  const point = new THREE.Mesh(new THREE.ConeGeometry(0.078, 0.08, 4), steel); point.rotation.y = Math.PI / 4; point.scale.z = 0.23; point.position.y = -0.02; sword.add(point);
+  const guard = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.05, 0.05), gold); guard.position.y = -0.96; sword.add(guard);
+  const grip = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.022, 0.3, 12), new THREE.MeshPhongMaterial({color: 0x5a1010})); grip.position.y = -1.13; sword.add(grip);
+  const pommel = new THREE.Mesh(new THREE.SphereGeometry(0.04, 16, 12), gold); pommel.position.y = -1.3; sword.add(pommel);
+  sword.traverse(o => { if (o.isMesh) o.castShadow = true; });
+}
+sword.visible = false; scene.add(sword);
+
+// black hole swirls over the pockets
+const swirlMat = new THREE.MeshBasicMaterial({color: 0xb04dff, transparent: true, opacity: 0.75, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending});
+const swirls = POCKETS.map(p => {
+  const m = new THREE.Mesh(new THREE.RingGeometry(0.05, 0.16, 32, 1, 0, Math.PI * 1.6), swirlMat);
+  m.rotation.x = -Math.PI / 2; m.position.set(p.x, 0.06, p.z); m.visible = false; scene.add(m); return m;
+});
+
+// sparks
+const SPARKS = 500;
+const sparkGeo = new THREE.BufferGeometry();
+const sparkPos = new Float32Array(SPARKS * 3), sparkCol = new Float32Array(SPARKS * 3);
+sparkGeo.setAttribute('position', new THREE.BufferAttribute(sparkPos, 3));
+sparkGeo.setAttribute('color', new THREE.BufferAttribute(sparkCol, 3));
+const sparks = new THREE.Points(sparkGeo, new THREE.PointsMaterial({size: 0.022, vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending}));
+sparks.frustumCulled = false; scene.add(sparks);
+const sparkVel = new Float32Array(SPARKS * 3), sparkLife = new Float32Array(SPARKS);
+let sparkNext = 0;
+for (let i = 0; i < SPARKS; i++) sparkPos[i * 3 + 1] = -10;
+function burst(x, y, z, count, hex, speed) {
+  const c = new THREE.Color(hex);
+  for (let k = 0; k < count; k++) {
+    const i = sparkNext; sparkNext = (sparkNext + 1) % SPARKS;
+    const a = Math.random() * Math.PI * 2, up = Math.random();
+    const s = speed * (0.3 + Math.random() * 0.7);
+    sparkPos[i * 3] = x; sparkPos[i * 3 + 1] = y; sparkPos[i * 3 + 2] = z;
+    sparkVel[i * 3] = Math.cos(a) * s; sparkVel[i * 3 + 1] = up * s * 1.2; sparkVel[i * 3 + 2] = Math.sin(a) * s;
+    const t = 0.7 + Math.random() * 0.3;
+    sparkCol[i * 3] = c.r * t; sparkCol[i * 3 + 1] = c.g * t; sparkCol[i * 3 + 2] = c.b * t;
+    sparkLife[i] = 0.5 + Math.random() * 0.6;
+  }
+}
+function updateSparks(dt) {
+  for (let i = 0; i < SPARKS; i++) {
+    if (sparkLife[i] <= 0) continue;
+    sparkLife[i] -= dt;
+    if (sparkLife[i] <= 0) { sparkPos[i * 3 + 1] = -10; continue; }
+    sparkVel[i * 3 + 1] -= 2.5 * dt;
+    sparkPos[i * 3] += sparkVel[i * 3] * dt; sparkPos[i * 3 + 1] += sparkVel[i * 3 + 1] * dt; sparkPos[i * 3 + 2] += sparkVel[i * 3 + 2] * dt;
+  }
+  sparkGeo.attributes.position.needsUpdate = true; sparkGeo.attributes.color.needsUpdate = true;
+}
 
 // ---------------- sound ----------------
 let AC = null, noiseBuf = null, muted = false;
@@ -446,7 +594,7 @@ function audioInit() {
   const Ctor = window.AudioContext || window.webkitAudioContext;
   if (!Ctor) return;
   AC = new Ctor();
-  noiseBuf = AC.createBuffer(1, AC.sampleRate * 0.4, AC.sampleRate);
+  noiseBuf = AC.createBuffer(1, AC.sampleRate * 1.2, AC.sampleRate);
   const d = noiseBuf.getChannelData(0);
   for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
 }
@@ -461,44 +609,104 @@ function knock(kind, freq, vol, dur, q) {
   src.connect(f); f.connect(g); g.connect(AC.destination);
   src.start(t); src.stop(t + dur + 0.02);
 }
+function tone(freq, vol, dur, type = 'square', slide = 1) {
+  if (!AC || muted) return;
+  const t = AC.currentTime, o = AC.createOscillator(), g = AC.createGain();
+  o.type = type; o.frequency.setValueAtTime(freq, t); o.frequency.exponentialRampToValueAtTime(freq * slide, t + dur);
+  g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0008, t + dur);
+  o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + dur + 0.02);
+}
 const sndBall = v => knock('ball', 3000, v * 0.5, 0.05, 2.5);
 const sndRail = v => knock('rail', 380, v * 0.6, 0.09, 3);
 const sndCue = v => knock('cue', 1900, 0.25 + v * 0.4, 0.045, 2);
 const sndPocket = () => { knock('pocket', 160, 0.9, 0.28, 1.5); setTimeout(() => knock('pocket2', 650, 0.35, 0.12, 4), 90); };
+const sndBoom = () => { knock('boom', 90, 1, 0.9, 0.7); knock('boom2', 400, 0.6, 0.4, 1); };
+const sndPower = () => { tone(440, 0.12, 0.12); setTimeout(() => tone(660, 0.12, 0.12), 90); setTimeout(() => tone(990, 0.12, 0.2), 180); };
 
 // ---------------- game state ----------------
+const MODE_NAMES = {cpu: 'You vs CPU', pvp: '2 Players', practice: 'Practice', online: 'Online'};
+let game = '8';                   // '8' | '9' | 'chinese'
 let mode = null, players = [], cur = 0, breaker = 0;
-let phase = 'menu';             // menu | aim | place | stroke | moving | over
-let ballInHand = false, headOnly = false, isBreak = false;
-let theta = 0, power = 0, spin = 0;
+let phase = 'menu';               // menu | aim | place | stroke | moving | over
+let ballInHand = false, headOnly = false, isBreak = false, tableOpen = true;
+let theta = 0, power = 0, spinX = 0, spinY = 0;
 let viewMode = 'cue', camPitch = 0.34, camDist = 0.8;
 let shot = null, shots = 0, strokeT = 0, strokeFrom = 0;
 let cpu = null, fineDir = 0, fineHold = 0;
 let restState = null;
+// Chinese Pool
+const POWERS = [
+  {id: 'sword', glyph: '剑', name: 'Sword', tip: 'Giant sword, giant cue ball. Plows through everything.'},
+  {id: 'bomb', glyph: '炸', name: 'Bomb', tip: 'Cue ball explodes on first contact.'},
+  {id: 'hole', glyph: '洞', name: 'Black hole', tip: 'Every pocket sucks in nearby balls.'},
+  {id: 'split', glyph: '分', name: 'Split', tip: 'Cue ball splits into five.'},
+  {id: 'fire', glyph: '火', name: 'Fireball', tip: 'Burns through balls and fires them at pockets.'},
+  {id: 'laser', glyph: '瞄', name: 'Laser', tip: 'Shows the full bounce path.'}
+];
+let cn = {score: 0, shotsLeft: 0, charges: {}, armed: null, best: 0};
 
 const onTable = b => b.state === 'table';
-function lowest() { for (let n = 1; n <= 9; n++) if (onTable(balls[n])) return n; return 9; }
-const humanTurn = () => (phase === 'aim' || phase === 'place') && players[cur] && !players[cur].cpu;
+const isSolid = n => n >= 1 && n <= 7, isStripe = n => n >= 9 && n <= 15;
+const inGroup = (n, g) => g === 'solids' ? isSolid(n) : g === 'stripes' ? isStripe(n) : false;
+const objectBalls = () => balls.filter(b => b.kind === 'num' && onTable(b));
+function lowest() { let m = 99; for (const b of balls) if (b.kind === 'num' && onTable(b) && b.n < m) m = b.n; return m === 99 ? 9 : m; }
+const groupLeft = g => objectBalls().filter(b => inGroup(b.n, g)).length;
+function legalTargets(pi) {
+  if (game === 'chinese') return balls.filter(b => b.kind === 'crowd' && onTable(b)).map(b => b.n);
+  if (game === '9') return [lowest()];
+  const others = objectBalls().filter(b => b.n !== 8).map(b => b.n);
+  const g = players[pi] && players[pi].group;
+  if (!g) return others.length ? others : [8];
+  const mine = others.filter(n => inGroup(n, g));
+  return mine.length ? mine : [8];
+}
+const humanTurn = () => (phase === 'aim' || phase === 'place') && players[cur] && !players[cur].cpu && !players[cur].remote;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const angDiff = (a, b) => { let d = b - a; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI; return d; };
+const isYou = p => p && p.name === 'You';
+const groupName = g => g === 'solids' ? 'Solids' : 'Stripes';
 
 function orientRandom(b) {
-  b.mesh.quaternion.setFromEuler(new THREE.Euler(-Math.PI / 2, 0, 0));
-  b.mesh.quaternion.premultiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.random() * Math.PI * 2));
+  b.q.setFromEuler(new THREE.Euler(-Math.PI / 2, 0, 0));
+  b.q.premultiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.random() * Math.PI * 2));
 }
 function resetBall(b, x, z) {
-  Object.assign(b, {x, z, px:x, pz:z, y:R, vx:0, vz:0, state:'table', sinkT:0, pocket:null});
-  b.mesh.visible = true;
+  Object.assign(b, {x, z, px: x, pz: z, y: b.r, vx: 0, vz: 0, state: 'table', sinkT: 0, pocket: null});
+  if (b.mesh) b.mesh.visible = true;
 }
+function triangle(apexX, rows) {
+  const sp = 2 * R * 1.002, slots = [];
+  for (let i = 0; i < rows; i++) for (let j = 0; j <= i; j++)
+    slots.push({x: apexX + i * sp * Math.sqrt(3) / 2 + (Math.random() - 0.5) * 0.0004, z: (j - i / 2) * sp + (Math.random() - 0.5) * 0.0004});
+  return slots;
+}
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 function rack() {
-  const order = [2, 3, 4, 5, 6, 7, 8].sort(() => Math.random() - 0.5);
-  const rows = [1, 2, 3, 2, 1], sp = 2 * R * 1.002;
-  let idx = 0, k = 0;
-  for (let i = 0; i < 5; i++) for (let j = 0; j < rows[i]; j++, idx++) {
-    const n = idx === 0 ? 1 : idx === 4 ? 9 : order[k++];
-    const jx = (Math.random() - 0.5) * 0.0004, jz = (Math.random() - 0.5) * 0.0004;
-    resetBall(balls[n], L / 2 + i * sp * Math.sqrt(3) / 2 + jx, (j - (rows[i] - 1) / 2) * sp + jz);
-    orientRandom(balls[n]);
+  if (game === 'chinese') {
+    setupBalls([0], 120);
+    const slots = triangle(-0.08, 15);
+    balls.slice(1).forEach((b, i) => { resetBall(b, slots[i].x, slots[i].z); orientRandom(b); });
+  } else if (game === '9') {
+    setupBalls([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    const rows = [1, 2, 3, 2, 1], sp = 2 * R * 1.002, order = shuffle([2, 3, 4, 5, 6, 7, 8]);
+    let idx = 0, k = 0;
+    for (let i = 0; i < 5; i++) for (let j = 0; j < rows[i]; j++, idx++) {
+      const n = idx === 0 ? 1 : idx === 4 ? 9 : order[k++];
+      const b = ballByN(n);
+      resetBall(b, L / 2 + i * sp * Math.sqrt(3) / 2 + (Math.random() - 0.5) * 0.0004, (j - (rows[i] - 1) / 2) * sp + (Math.random() - 0.5) * 0.0004);
+      orientRandom(b);
+    }
+  } else {
+    setupBalls([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
+    // 8 in the middle, one solid and one stripe in the back corners
+    const slots = triangle(L / 2, 5);
+    const solid = 1 + Math.floor(Math.random() * 7), stripe = 9 + Math.floor(Math.random() * 7);
+    const back = Math.random() < 0.5 ? [solid, stripe] : [stripe, solid];
+    const rest = shuffle([1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15].filter(n => n !== solid && n !== stripe));
+    slots.forEach((s, i) => {
+      const n = i === 4 ? 8 : i === 10 ? back[0] : i === 14 ? back[1] : rest.pop();
+      const b = ballByN(n); resetBall(b, s.x, s.z); orientRandom(b);
+    });
   }
   resetBall(cue, -L / 2, 0); orientRandom(cue);
 }
@@ -507,76 +715,142 @@ function validSpot(x, z, ignore) {
   if (headOnly && x > -L / 2) return false;
   for (const b of balls) {
     if (b === ignore || !onTable(b)) continue;
-    if (Math.hypot(b.x - x, b.z - z) < 2 * R + 0.002) return false;
+    if (Math.hypot(b.x - x, b.z - z) < b.r + R + 0.002) return false;
   }
   return true;
 }
 function freeSpot(x, z, ignore, stepX) {
-  for (let i = 0; i < 60; i++) {
-    const tx = x + stepX * i * 2 * R * 1.05;
-    if (validSpot(tx, z, ignore)) return {x:tx, z};
-    const tz = z + (i % 2 ? 1 : -1) * Math.ceil(i / 2) * 2 * R * 1.05;
-    if (validSpot(x, tz, ignore)) return {x, z:tz};
-  }
-  return {x, z};
+  const save = headOnly; headOnly = false;
+  try {
+    for (let i = 0; i < 80; i++) {
+      const tx = x + stepX * i * 2 * R * 1.05;
+      if (validSpot(tx, z, ignore)) return {x: tx, z};
+      const tz = z + (i % 2 ? 1 : -1) * Math.ceil(i / 2) * 2 * R * 1.05;
+      if (validSpot(x, tz, ignore)) return {x, z: tz};
+    }
+    return {x, z};
+  } finally { headOnly = save; }
 }
 
 // ---------------- physics ----------------
-function pocketBall(b) {
+let sorted = [];
+function nearestPocket(x, z) {
   let best = POCKETS[0], bd = 1e9;
-  for (const p of POCKETS) { const d = Math.hypot(p.x - b.x, p.z - b.z); if (d < bd) { bd = d; best = p; } }
-  b.state = 'sinking'; b.pocket = best; b.sinkT = 0;
-  b.vx *= 0.3; b.vz *= 0.3;
-  if (shot) shot.potted.push(b.n);
-  sndPocket();
+  for (const p of POCKETS) { const d = Math.hypot(p.x - x, p.z - z); if (d < bd) { bd = d; best = p; } }
+  return best;
 }
-function physStep(h) {
-  for (const b of balls) if (onTable(b)) { b.x += b.vx * h; b.z += b.vz * h; }
-  // ball to ball
-  for (let i = 0; i < 10; i++) {
-    const a = balls[i]; if (!onTable(a)) continue;
-    for (let j = i + 1; j < 10; j++) {
-      const b = balls[j]; if (!onTable(b)) continue;
-      const dx = b.x - a.x, dz = b.z - a.z, d2 = dx * dx + dz * dz;
-      if (d2 >= 4 * R * R || d2 < 1e-14) continue;
-      const d = Math.sqrt(d2), nx = dx / d, nz = dz / d, ov = (2 * R - d) / 2;
-      a.x -= nx * ov; a.z -= nz * ov; b.x += nx * ov; b.z += nz * ov;
-      const rel = (a.vx - b.vx) * nx + (a.vz - b.vz) * nz;
-      if (rel <= 0) continue;
-      const c = a.n === 0 ? a : b.n === 0 ? b : null;
-      let pre = null;
-      if (c && shot && !shot.spinDone) pre = {vx:c.vx, vz:c.vz};
-      const imp = rel * (1 + E_BALL) / 2;
-      a.vx -= imp * nx; a.vz -= imp * nz; b.vx += imp * nx; b.vz += imp * nz;
-      sndBall(rel / 3);
-      if (shot && c && shot.first === null) shot.first = (c === a ? b : a).n;
-      if (pre) {
-        shot.spinDone = true;
-        const sp = Math.hypot(pre.vx, pre.vz);
-        if (sp > 0.01) {
-          const f = 0.2 + shot.spin * 0.55;
-          c.vx += pre.vx / sp * sp * f * 0.9; c.vz += pre.vz / sp * sp * f * 0.9;
-        }
+function pocketBall(b) {
+  b.state = 'sinking'; b.pocket = nearestPocket(b.x, b.z); b.sinkT = 0;
+  b.vx *= 0.3; b.vz *= 0.3;
+  if (shot && b.kind !== 'clone') shot.potted.push(b.kind === 'crowd' ? -1 : b.n);
+  sndPocket();
+  if (game === 'chinese') {
+    burst(b.pocket.x, 0.04, b.pocket.z, 26, b.kind === 'cue' ? 0xff4040 : 0xffc94d, 1.1);
+    if (b.kind === 'crowd') chineseScore();
+  }
+}
+function explode(cx, cz) {
+  shot.exploded = true;
+  for (const b of balls) {
+    if (!onTable(b) || b.kind === 'cue') continue;
+    const dx = b.x - cx, dz = b.z - cz, d = Math.hypot(dx, dz);
+    if (d > 0.55 || d < 1e-6) continue;
+    const k = 6 * (1 - d / 0.55) + 0.8;
+    b.vx += dx / d * k; b.vz += dz / d * k;
+  }
+  cue.vx *= 0.1; cue.vz *= 0.1;
+  burst(cx, 0.05, cz, 160, 0xff7a1f, 2.2); burst(cx, 0.05, cz, 80, 0xfff1a8, 1.4);
+  shake = 0.05; flash(); sndBoom();
+}
+function collide(a, b) {
+  const dx = b.x - a.x, dz = b.z - a.z, d2 = dx * dx + dz * dz, rr = a.r + b.r;
+  if (d2 >= rr * rr || d2 < 1e-14) return;
+  // clones ignore the cue ball and each other
+  if ((a.kind === 'clone' || b.kind === 'clone') && (a.kind === 'cue' || b.kind === 'cue' || a.kind === b.kind)) return;
+  const c = a.kind === 'cue' ? a : b.kind === 'cue' ? b : null;
+  const o = c === a ? b : a;
+  if (c && shot) {
+    if (shot.first === null) shot.first = o.kind === 'crowd' ? -1 : o.n;
+    if (shot.power === 'bomb' && !shot.exploded) { explode(c.x, c.z); return; }
+    if (shot.power === 'fire') {
+      if (!o.fired) {
+        o.fired = true;
+        const p = nearestPocket(o.x, o.z), px = p.x - o.x, pz = p.z - o.z, pd = Math.hypot(px, pz) || 1;
+        o.vx = px / pd * 4.2; o.vz = pz / pd * 4.2;
+        burst(o.x, 0.04, o.z, 14, 0xff5a1f, 0.8); sndBall(0.8);
       }
+      return;   // the fireball keeps going straight through
     }
   }
-  // cushions, jaws, pockets
+  const d = Math.sqrt(d2), nx = dx / d, nz = dz / d, ov = rr - d, ma = a.m, mb = b.m;
+  a.x -= nx * ov * mb / (ma + mb); a.z -= nz * ov * mb / (ma + mb);
+  b.x += nx * ov * ma / (ma + mb); b.z += nz * ov * ma / (ma + mb);
+  const rel = (a.vx - b.vx) * nx + (a.vz - b.vz) * nz;
+  if (rel <= 0) return;
+  const pre = c && shot && !shot.spinDone ? {vx: c.vx, vz: c.vz} : null;
+  const j = rel * (1 + E_BALL) / (1 / ma + 1 / mb);
+  a.vx -= j / ma * nx; a.vz -= j / ma * nz; b.vx += j / mb * nx; b.vz += j / mb * nz;
+  sndBall(rel / 3);
+  if (c) c.side *= 0.6;
+  if (pre) {
+    shot.spinDone = true;
+    const sp = Math.hypot(pre.vx, pre.vz);
+    if (sp > 0.01 && c.m === 1) {
+      const f = (0.2 + shot.spinY * 0.55) * 0.9;
+      c.vx += pre.vx * f; c.vz += pre.vz * f;
+    }
+  }
+}
+function physStep(h) {
+  const hole = shot && shot.power === 'hole' && shot.time < 7;
   for (const b of balls) {
     if (!onTable(b)) continue;
-    const ax = Math.abs(b.x), az = Math.abs(b.z);
-    if (az > W - R && ax < L - CG && ax > SG) {
-      const s = Math.sign(b.z); b.z = s * (W - R);
-      if (b.vz * s > 0) { sndRail(Math.abs(b.vz) / 3); b.vz = -b.vz * E_RAIL; b.vx *= 0.96; }
+    if (hole && b.kind !== 'cue') {
+      for (const p of POCKETS) {
+        const dx = p.x - b.x, dz = p.z - b.z, d = Math.hypot(dx, dz);
+        if (d < 0.5 && d > 1e-4) { const a = 2.6 / (d + 0.06); b.vx += dx / d * a * h; b.vz += dz / d * a * h; }
+      }
     }
-    if (ax > L - R && az < W - CG) {
-      const s = Math.sign(b.x); b.x = s * (L - R);
-      if (b.vx * s > 0) { sndRail(Math.abs(b.vx) / 3); b.vx = -b.vx * E_RAIL; b.vz *= 0.96; }
+    b.x += b.vx * h; b.z += b.vz * h;
+  }
+  // sweep and prune along x so a table full of balls stays cheap
+  sorted.length = 0;
+  for (const b of balls) if (onTable(b)) sorted.push(b);
+  sorted.sort((p, q) => (p.x - p.r) - (q.x - q.r));
+  for (let i = 0; i < sorted.length; i++) {
+    const a = sorted[i], reach = a.x + a.r;
+    for (let k = i + 1; k < sorted.length; k++) {
+      const b = sorted[k];
+      if (b.x - b.r > reach) break;
+      collide(a, b);
+    }
+  }
+  for (const b of balls) {
+    if (!onTable(b)) continue;
+    const ax = Math.abs(b.x), az = Math.abs(b.z), r = b.r;
+    let hitRail = null;
+    if (az > W - r && ax < L - CG && ax > SG) {
+      const s = Math.sign(b.z); b.z = s * (W - r);
+      if (b.vz * s > 0) { hitRail = {nx: 0, nz: -s, vn: Math.abs(b.vz)}; b.vz = -b.vz * E_RAIL; b.vx *= 0.96; }
+    }
+    if (ax > L - r && az < W - CG) {
+      const s = Math.sign(b.x); b.x = s * (L - r);
+      if (b.vx * s > 0) { hitRail = {nx: -s, nz: 0, vn: Math.abs(b.vx)}; b.vx = -b.vx * E_RAIL; b.vz *= 0.96; }
+    }
+    if (hitRail) {
+      sndRail(hitRail.vn / 3);
+      if (b.side) {   // english: kick along the rail, to the right of the incoming path for right spin
+        const tx = -hitRail.nz, tz = hitRail.nx;   // rail tangent
+        const k = b.side * 0.45 * hitRail.vn;
+        b.vx += tx * k; b.vz += tz * k;
+        b.side *= 0.5;
+      }
     }
     for (const j of JAWS) {
       const dx = b.x - j.x, dz = b.z - j.z, d2 = dx * dx + dz * dz;
-      if (d2 < R * R && d2 > 1e-14) {
+      if (d2 < r * r && d2 > 1e-14) {
         const d = Math.sqrt(d2), nx = dx / d, nz = dz / d;
-        b.x = j.x + nx * R; b.z = j.z + nz * R;
+        b.x = j.x + nx * r; b.z = j.z + nz * r;
         const vn = b.vx * nx + b.vz * nz;
         if (vn < 0) { b.vx -= (1 + E_RAIL) * vn * nx; b.vz -= (1 + E_RAIL) * vn * nz; sndRail(-vn / 3); }
       }
@@ -584,7 +858,7 @@ function physStep(h) {
     if (Math.abs(b.x) > L || Math.abs(b.z) > W || !isFinite(b.x) || !isFinite(b.z)) { pocketBall(b); continue; }
     const sp = Math.hypot(b.vx, b.vz);
     if (sp > 0) {
-      const dv = (DA + DB * sp) * h;
+      const dv = (DA + DB * sp) * h * (b.kind === 'cue' && shot && shot.power === 'fire' ? 0.25 : 1);
       if (sp <= dv || sp < 0.006) { b.vx = 0; b.vz = 0; }
       else { const k = (sp - dv) / sp; b.vx *= k; b.vz *= k; }
     }
@@ -594,70 +868,116 @@ function anyMoving() {
   for (const b of balls) { if (b.state === 'sinking') return true; if (onTable(b) && (b.vx || b.vz)) return true; }
   return false;
 }
-
-// stopping distance under a = DA + DB*v
 const distFor = v => v / DB - (DA / (DB * DB)) * Math.log(1 + DB * v / DA);
 function speedForDist(d) { let lo = 0, hi = 20; for (let i = 0; i < 40; i++) { const m = (lo + hi) / 2; if (distFor(m) < d) lo = m; else hi = m; } return hi; }
 const speedOf = p => MINV + (MAXV - MINV) * Math.pow(p, 1.5);
 const powerFor = v => Math.pow(clamp((v - MINV) / (MAXV - MINV), 0, 1), 1 / 1.5);
 
 // ---------------- aim ray ----------------
-function castAim(cx, cz, dx, dz) {
+function castAim(cx, cz, dx, dz, cr = R) {
   let best = Infinity, hit = null;
   for (const b of balls) {
-    if (b === cue || !onTable(b)) continue;
-    const ox = cx - b.x, oz = cz - b.z, bq = ox * dx + oz * dz, c = ox * ox + oz * oz - 4 * R * R, disc = bq * bq - c;
+    if (b === cue || !onTable(b) || b.kind === 'clone') continue;
+    const rr = cr + b.r;
+    const ox = cx - b.x, oz = cz - b.z, bq = ox * dx + oz * dz, c = ox * ox + oz * oz - rr * rr, disc = bq * bq - c;
     if (disc < 0) continue;
     const t = -bq - Math.sqrt(disc);
     if (t > 0 && t < best) { best = t; hit = b; }
   }
-  const tx = dx > 1e-9 ? (L - R - cx) / dx : dx < -1e-9 ? (-(L - R) - cx) / dx : Infinity;
-  const tz = dz > 1e-9 ? (W - R - cz) / dz : dz < -1e-9 ? (-(W - R) - cz) / dz : Infinity;
+  const tx = dx > 1e-9 ? (L - cr - cx) / dx : dx < -1e-9 ? (-(L - cr) - cx) / dx : Infinity;
+  const tz = dz > 1e-9 ? (W - cr - cz) / dz : dz < -1e-9 ? (-(W - cr) - cz) / dz : Infinity;
   const tw = Math.max(0, Math.min(tx, tz));
-  return hit && best < tw ? {t:best, ball:hit} : {t:tw, ball:null};
+  return hit && best < tw ? {t: best, ball: hit} : {t: tw, ball: null, wallX: tx <= tz};
 }
 
 // ---------------- UI ----------------
-const ui = {top:$('top'), power:$('power'), bottom:$('bottom'), hint:$('hint'), menu:$('menu'), over:$('over'),
-  fill:document.querySelector('#power .fill'), knob:document.querySelector('#power .knob'), pct:document.querySelector('#power .pct')};
+const ui = {online: $('online'), top: $('top'), power: $('power'), bottom: $('bottom'), hint: $('hint'), menu: $('menu'), over: $('over'), powers: $('powers'),
+  fill: document.querySelector('#power .fill'), knob: document.querySelector('#power .knob'), pct: document.querySelector('#power .pct')};
 function miniBall(n, cls = '') {
+  if (n < 0) return `<span class="mb ${cls}" style="background:#151515"></span>`;
   const c = COLORS[n];
-  const bg = n >= 9 ? `linear-gradient(#f7f3e8 0 26%, ${c} 26% 74%, #f7f3e8 74%)` : c;
+  const bg = n >= 9 ? `linear-gradient(${IVORY} 0 26%, ${c} 26% 74%, ${IVORY} 74%)` : c;
   return `<span class="mb ${cls}" style="background:${bg}"><i>${n}</i></span>`;
 }
-$('rackart').innerHTML = [1,2,3,4,5,6,7,8,9].map(n => miniBall(n)).join('');
+$('rackart').innerHTML = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(n => miniBall(n)).join('');
 let msgTimer = 0;
 function say(text, kind = '', ms = 2000) {
   const m = $('msg'); m.textContent = text; m.className = 'show ' + kind;
   clearTimeout(msgTimer); msgTimer = setTimeout(() => { m.className = kind; }, ms);
 }
+let comboTimer = 0;
+function combo(big, small) {
+  const c = $('combo');
+  c.innerHTML = `<b>${big}</b><small>${small}</small>`;
+  c.className = ''; void c.offsetWidth; c.className = 'show';
+  clearTimeout(comboTimer); comboTimer = setTimeout(() => { c.className = ''; }, 1400);
+}
+function flash() { const f = $('flash'); f.className = ''; void f.offsetWidth; f.className = 'go'; }
 function renderHUD() {
-  const p0 = $('p0'), p1 = $('p1');
-  const status = i => {
-    if (phase === 'over') return '';
-    if (i !== cur) return mode === 'practice' ? '' : 'Waiting';
-    if (isBreak) return 'Breaking';
-    if (ballInHand) return 'Ball in hand';
-    return players[i].cpu ? 'Thinking' : 'Your shot';
-  };
-  p0.querySelector('b').textContent = players[0].name;
-  p0.querySelector('span').textContent = mode === 'practice' ? `Shots: ${shots}` : status(0);
-  p0.classList.toggle('on', cur === 0 && phase !== 'over');
-  p1.hidden = players.length < 2;
-  if (players[1]) {
-    p1.querySelector('b').textContent = players[1].name;
-    p1.querySelector('span').textContent = status(1);
-    p1.classList.toggle('on', cur === 1 && phase !== 'over');
+  const p0 = $('p0'), p1 = $('p1'), tball = $('tball'), tcap = document.querySelector('#target span');
+  if (game === 'chinese') {
+    p0.querySelector('b').textContent = cn.score.toLocaleString();
+    p0.querySelector(':scope > span').textContent = `Score · best ${cn.best.toLocaleString()}`;
+    p0.classList.add('on');
+    p1.hidden = false; p1.classList.remove('on');
+    p1.querySelector('b').textContent = String(cn.shotsLeft);
+    p1.querySelector(':scope > span').textContent = 'Shots left';
+    tcap.textContent = 'Balls';
+    tball.innerHTML = `<em class="count">${balls.filter(b => b.kind === 'crowd' && onTable(b)).length}</em>`;
+    $('tray').hidden = true;
+    renderPowers();
+    return;
   }
-  $('tball').innerHTML = miniBall(lowest());
-  $('tray').innerHTML = [1,2,3,4,5,6,7,8,9].map(n => miniBall(n, onTable(balls[n]) ? '' : 'down')).join('');
+  $('tray').hidden = false;
+  const status = i => {
+    const p = players[i];
+    if (phase === 'over') return '';
+    let s = '';
+    if (game === '8' && p.group) {
+      const left = groupLeft(p.group);
+      s = left ? `${groupName(p.group)} · ${left} left` : 'On the 8';
+    }
+    if (i !== cur) return s || (mode === 'practice' ? '' : 'Waiting');
+    if (isBreak) return 'Breaking';
+    if (ballInHand) return s ? s + ' · in hand' : 'Ball in hand';
+    return s || (p.cpu ? 'Thinking' : p.remote ? 'Aiming' : 'Your shot');
+  };
+  const chip = (el, i) => {
+    const p = players[i];
+    const icon = game === '8' && p.group ? miniBall(p.group === 'solids' ? 1 : 9, 'tiny' + (p.group === 'stripes' ? ' st' : '')) : '';
+    el.querySelector('b').innerHTML = `${p.name}${icon}`;
+    el.querySelector(':scope > span').textContent = mode === 'practice' ? `Shots: ${shots}` : status(i);
+    el.classList.toggle('on', cur === i && phase !== 'over');
+  };
+  chip(p0, 0);
+  p1.hidden = players.length < 2;
+  if (players[1]) chip(p1, 1);
+  if (game === '9') { tcap.textContent = 'Hit'; tball.innerHTML = miniBall(lowest()); }
+  else {
+    const t = legalTargets(cur);
+    const g = players[cur] && players[cur].group;
+    if (t.length === 1 && t[0] === 8) { tcap.textContent = 'Hit'; tball.innerHTML = miniBall(8); }
+    else if (g) { tcap.textContent = groupName(g); tball.innerHTML = miniBall(t[0]); }
+    else { tcap.textContent = 'Open'; tball.innerHTML = `<span class="pair">${miniBall(1)}${miniBall(9)}</span>`; }
+  }
+  const list = game === '9' ? [1, 2, 3, 4, 5, 6, 7, 8, 9] : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+  $('tray').classList.toggle('eight', game === '8');
+  $('tray').innerHTML = list.map(n => { const b = ballByN(n); return miniBall(n, b && onTable(b) ? '' : 'down'); }).join('');
+}
+function renderPowers() {
+  ui.powers.innerHTML = POWERS.map(p => {
+    const n = cn.charges[p.id] || 0;
+    return `<button class="pw${cn.armed === p.id ? ' armed' : ''}" data-pw="${p.id}" ${n ? '' : 'disabled'} aria-label="${p.name}: ${n} left">
+      <b>${p.glyph}</b><small>${p.name}</small><i>${n}</i></button>`;
+  }).join('');
 }
 function renderControls() {
   const human = humanTurn();
   ui.power.hidden = !(phase === 'aim' && human);
   ui.bottom.hidden = !human;
+  ui.powers.hidden = !(game === 'chinese' && phase === 'aim' && human);
   $('left').hidden = $('right').hidden = phase !== 'aim';
-  $('moveball').hidden = !(phase === 'aim' && ballInHand);
+  $('moveball').hidden = !(phase === 'aim' && ballInHand && game !== 'chinese');
   $('done').hidden = phase !== 'place';
   $('spin').style.visibility = phase === 'aim' ? 'visible' : 'hidden';
   $('viewbtn').style.visibility = phase === 'aim' ? 'visible' : 'hidden';
@@ -675,117 +995,255 @@ function renderPower() {
   ui.pct.textContent = Math.round(power * 100) + '%';
 }
 function renderSpin() {
-  $('spindot').style.top = (24 - spin * 20) + 'px';
-  $('spincap').textContent = spin > 0.05 ? `Follow ${Math.round(spin * 100)}%` : spin < -0.05 ? `Draw ${Math.round(-spin * 100)}%` : 'Spin: none';
+  $('spindot').style.transform = `translate(${spinX * 22}px, ${-spinY * 22}px)`;
+  const v = spinY > 0.05 ? 'Follow' : spinY < -0.05 ? 'Draw' : '';
+  const h = spinX > 0.05 ? 'right' : spinX < -0.05 ? 'left' : '';
+  $('spincap').textContent = v && h ? `${v} ${h}` : v || (h ? `${h[0].toUpperCase()}${h.slice(1)} english` : 'Center ball');
 }
 
 // ---------------- flow ----------------
+function makePlayers(m) {
+  return m === 'cpu' ? [{name: 'You'}, {name: 'CPU', cpu: true}]
+    : m === 'pvp' ? [{name: 'Player 1'}, {name: 'Player 2'}]
+    : m === 'chinese' ? [{name: 'You'}]
+    : [{name: 'Practice'}];
+}
 function startGame(m) {
   mode = m;
-  players = m === 'cpu' ? [{name:'You'}, {name:'CPU', cpu:true}]
-          : m === 'pvp' ? [{name:'Player 1'}, {name:'Player 2'}]
-          : [{name:'Practice'}];
+  if (m === 'chinese') game = 'chinese';
+  else if (game === 'chinese') game = '8';
+  players = makePlayers(m);
   breaker = 0;
   newRack();
 }
-function newRack() {
-  rack();
-  cur = breaker; isBreak = true; ballInHand = true; headOnly = true; shots = 0;
+function newRack(keepBalls) {
+  if (!keepBalls) rack();
+  cur = breaker; isBreak = true; ballInHand = game !== 'chinese'; headOnly = ballInHand; shots = 0; tableOpen = true;
+  players.forEach(p => { p.group = null; });
   ui.menu.hidden = true; ui.over.hidden = true; ui.top.hidden = false;
+  document.body.classList.toggle('cn', game === 'chinese');
+  if (game === 'chinese') {
+    cn.score = 0; cn.shotsLeft = 12; cn.armed = null;
+    cn.charges = {sword: 1, bomb: 2, hole: 1, split: 1, fire: 1, laser: 2};
+    try { cn.best = +localStorage.getItem('cp-cn-best') || 0; } catch (_) { cn.best = 0; }
+  }
   startTurn();
-  say(players.length > 1 ? `${players[cur].name} to break` : 'Break the rack', 'good', 1600);
+  if (game === 'chinese') combo('暴力台球', 'CHINESE POOL · 12 shots · sink everything');
+  else say(players.length > 1 ? `${players[cur].name} ${isYou(players[cur]) ? 'break' : 'to break'}` : 'Break the rack', 'good', 1600);
 }
-function aimAtLowest() {
-  const t = balls[lowest()];
-  theta = Math.atan2(t.z - cue.z, t.x - cue.x);
+function aimAtTarget() {
+  const ns = legalTargets(cur);
+  let best = null, bd = 1e9;
+  for (const b of balls) {
+    if (!onTable(b) || b === cue || b.kind === 'clone') continue;
+    if (game !== 'chinese' && !ns.includes(b.n)) continue;
+    const d = Math.hypot(b.x - cue.x, b.z - cue.z);
+    if (d < bd) { bd = d; best = b; }
+  }
+  if (best) theta = Math.atan2(best.z - cue.z, best.x - cue.x);
 }
 function startTurn() {
-  phase = 'aim'; power = 0; spin = 0; cpu = null; fineDir = 0;
-  aimAtLowest();
-  restState = {mode, cur, breaker, ballInHand, headOnly, isBreak, shots, balls: balls.map(b => [onTable(b) ? 1 : 0, b.x, b.z])};
+  phase = 'aim'; power = 0; spinX = 0; spinY = 0; cpu = null; fineDir = 0;
+  aimAtTarget();
+  restState = mode === 'online' || game === 'chinese' ? null : {game, mode, cur, breaker, ballInHand, headOnly, isBreak, shots, tableOpen,
+    groups: players.map(p => p.group || null), balls: balls.map(b => [b.n, onTable(b) ? 1 : 0, b.x, b.z])};
   renderHUD(); renderControls(); renderSpin();
 }
 function shoot() {
   if (phase !== 'aim') return;
-  shot = {target: lowest(), first:null, potted:[], spinDone:false, spin, ox:cue.x, oz:cue.z, dx:Math.cos(theta), dz:Math.sin(theta), time:0, power};
+  shot = {targets: legalTargets(cur), first: null, potted: [], spinDone: false, spinX, spinY, ox: cue.x, oz: cue.z,
+          dx: Math.cos(theta), dz: Math.sin(theta), time: 0, remote: !!players[cur].remote,
+          power: game === 'chinese' ? cn.armed : null, exploded: false, pot: power};
+  if (mode === 'online' && !shot.remote) net.send({t: 'shot', theta, power, sx: spinX, sy: spinY, cx: cue.x, cz: cue.z});
   strokeFrom = 0.02 + power * 0.22; strokeT = 0;
   phase = 'stroke';
   renderControls();
 }
 function strike() {
-  const v = speedOf(shot.power);
-  cue.vx = Math.cos(theta) * v; cue.vz = Math.sin(theta) * v;
-  sndCue(shot.power);
+  const v = speedOf(shot.pot);
+  const dx = Math.cos(theta), dz = Math.sin(theta);
+  if (shot.power === 'sword') { cue.r = R * 3; cue.m = 30; cue.y = cue.r; }
+  cue.vx = dx * v; cue.vz = dz * v;
+  cue.side = shot.spinX;
+  balls.forEach(b => { b.fired = false; });
+  sndCue(shot.pot);
+  if (shot.power) {
+    cn.charges[shot.power]--; cn.armed = null; sndPower();
+    const P = POWERS.find(p => p.id === shot.power);
+    combo(P.glyph + '!', P.name.toUpperCase());
+    if (shot.power === 'split') {
+      [-0.26, -0.13, 0.13, 0.26].forEach((da, i) => {
+        const c = makeBall(0, 'clone', cloneMeshes[i]);
+        c.mesh.visible = true;
+        resetBall(c, cue.x, cue.z);
+        c.vx = Math.cos(theta + da) * v; c.vz = Math.sin(theta + da) * v;
+        balls.push(c);
+      });
+    }
+    if (shot.power === 'sword' || shot.power === 'fire') { shake = 0.02; burst(cue.x, 0.05, cue.z, 50, shot.power === 'fire' ? 0xff5a1f : 0xffd34d, 1.2); }
+  }
+  if (game === 'chinese') cn.shotsLeft--;
   phase = 'moving'; ballInHand = false; headOnly = false; shots++;
   renderHUD(); renderControls();
 }
 function nextPlayer() { if (players.length > 1) cur = 1 - cur; }
+function respot(n) {
+  const b = ballByN(n);
+  const sp = freeSpot(L / 2, 0, b, 1);
+  resetBall(b, sp.x, sp.z); orientRandom(b);
+}
+function restoreCueBall() {
+  balls = balls.filter(b => b.kind !== 'clone');
+  cloneMeshes.forEach(m => { m.visible = false; });
+  cue.r = R; cue.m = 1; cue.y = R; cue.side = 0;
+  if (cue.mesh) cue.mesh.scale.setScalar(1);
+}
 function endShot() {
   const s = shot; shot = null;
+  // Online: the shooter's simulation is the official one. Send the result so the other phone matches it.
+  if (mode === 'online' && !s.remote) net.send({t: 'result', first: s.first, potted: s.potted, balls: balls.map(b => [onTable(b) ? 1 : 0, b.x, b.z])});
+  restoreCueBall();
+  if (game === 'chinese') return endChinese(s);
   const shooter = players[cur];
-  const potted = s.potted.filter(n => n !== 0);
+  const potted = s.potted.filter(n => n > 0);
   const scratch = s.potted.includes(0);
+  const wasBreak = isBreak; isBreak = false;
   let foul = null;
   if (scratch) foul = 'scratch';
   else if (s.first === null) foul = 'no ball hit';
-  else if (s.first !== s.target) foul = `hit the ${s.first} before the ${s.target}`;
-  const nine = potted.includes(9);
-  const wasBreak = isBreak; isBreak = false;
-  if (nine && !foul) { return win(cur, wasBreak); }
-  if (nine && foul) {
-    const sp = freeSpot(L / 2, 0, balls[9], 1);
-    resetBall(balls[9], sp.x, sp.z); orientRandom(balls[9]);
+  else if (!s.targets.includes(s.first)) foul = game === '9' ? `hit the ${s.first} before the ${s.targets[0]}`
+    : s.first === 8 ? 'hit the 8 first' : `hit the ${s.first} first`;
+  if (scratch) { const sp = freeSpot(-L / 2, 0, cue, -1); resetBall(cue, sp.x, sp.z); orientRandom(cue); }
+
+  if (game === '9') {
+    const nine = potted.includes(9);
+    if (nine && !foul) return win(cur, wasBreak ? 'Nine on the break. Unreal.' : 'The 9 ball went down clean.');
+    if (nine) respot(9);
+    return turnOutcome(shooter, foul, potted.length > 0, nine ? ' The 9 comes back up.' : '');
   }
-  if (scratch) {
-    const sp = freeSpot(-L / 2, 0, cue, -1);
-    resetBall(cue, sp.x, sp.z); orientRandom(cue);
+
+  // eight-ball
+  const eight = potted.includes(8);
+  if (eight) {
+    if (wasBreak) { respot(8); }
+    else if (!foul && s.targets.includes(8)) return win(cur, 'Called it. The 8 went down clean.');
+    else if (players.length > 1) return win(1 - cur, `${shooter.name} sank the 8 ${foul ? 'on a foul' : 'too early'}.`);
+    else { respot(8); foul = foul || 'the 8 went down early'; }
   }
+  let mineDown = potted.filter(n => n !== 8).length > 0;
+  if (tableOpen && !wasBreak && !foul && players.length > 1) {
+    const firstObj = potted.find(n => n !== 8);
+    if (firstObj) {
+      const g = isSolid(firstObj) ? 'solids' : 'stripes';
+      shooter.group = g; players[1 - cur].group = g === 'solids' ? 'stripes' : 'solids';
+      tableOpen = false;
+      mineDown = potted.some(n => inGroup(n, g));
+      const other = players[1 - cur];
+      const line = isYou(shooter) ? `You're ${g}!` : isYou(other) ? `${shooter.name} takes ${g}. You're ${other.group}.` : `${shooter.name} is ${g}. ${other.name} is ${other.group}.`;
+      say(line, 'good', 2400);
+      groupBanner(shooter, other);
+      if (foul) return turnOutcome(shooter, foul, false, '');
+      if (mineDown) { startTurn(); return; }
+      nextPlayer(); startTurn(); return;
+    }
+  } else if (!tableOpen && shooter.group) {
+    mineDown = potted.some(n => inGroup(n, shooter.group));
+  }
+  return turnOutcome(shooter, foul, mineDown, eight && wasBreak ? ' The 8 comes back up.' : '');
+}
+function turnOutcome(shooter, foul, keepGoing, extra) {
   if (foul) {
     nextPlayer();
     ballInHand = true;
     const who = players.length > 1 ? `${shooter.name} fouled` : 'Foul';
-    say(`${who}: ${foul}. ${players.length > 1 ? `Ball in hand for ${players[cur].name}.` : 'Ball in hand.'}${nine ? ' The 9 comes back up.' : ''}`, 'foul', 2600);
-  } else if (potted.length) {
-    say(potted.length > 1 ? `Sank the ${potted.join(' and ')}. Shoot again.` : `Sank the ${potted[0]}. Shoot again.`, 'good', 1500);
+    say(`${who}: ${foul}. ${players.length > 1 ? `Ball in hand for ${players[cur].name}.` : 'Ball in hand.'}${extra}`, 'foul', 2600);
+  } else if (keepGoing) {
+    say(shooter.remote ? 'Your friend sank one' : players.length > 1 ? 'Nice. Shoot again.' : 'Nice.', 'good', 1300);
   } else {
     nextPlayer();
-    if (players.length > 1) say(mode === 'pvp' ? `Pass the phone to ${players[cur].name}` : players[cur].cpu ? 'CPU\'s turn' : 'Your turn', '', 1500);
+    if (players.length > 1) say(mode === 'pvp' ? `Pass the phone to ${players[cur].name}` : players[cur].cpu ? 'CPU\'s turn' : players[cur].remote ? 'Your friend\'s turn' : 'Your turn', '', 1500);
   }
   startTurn();
 }
-function win(i, onBreak) {
+function groupBanner(a, b) {
+  const el = $('groups');
+  const row = p => `<div>${miniBall(p.group === 'solids' ? 1 : 9)}${miniBall(p.group === 'solids' ? 4 : 12)}<b>${p.name}</b><span>${groupName(p.group)}</span></div>`;
+  el.innerHTML = row(a) + row(b);
+  el.className = ''; void el.offsetWidth; el.className = 'show';
+  setTimeout(() => { el.className = ''; }, 2600);
+}
+function win(i, sub) {
   phase = 'over';
   renderHUD(); renderControls();
   const p = players[i];
   setTimeout(() => {
-    $('overtitle').textContent = mode === 'practice' ? 'Rack cleared!' : p.cpu ? 'CPU wins' : mode === 'cpu' ? 'You win!' : `${p.name} wins!`;
-    $('oversub').textContent = mode === 'practice'
-      ? `You sank the 9 in ${shots} shot${shots === 1 ? '' : 's'}.`
-      : onBreak ? 'Nine on the break. Unreal.' : 'The 9 ball went down clean.';
+    $('overtitle').textContent = mode === 'practice' ? 'Rack cleared!' : p.cpu ? 'CPU wins' : p.remote ? 'Your friend wins' : mode === 'cpu' || mode === 'online' ? 'You win!' : `${p.name} wins!`;
+    $('oversub').textContent = mode === 'practice' ? `You cleared it in ${shots} shot${shots === 1 ? '' : 's'}.` : sub;
     ui.over.hidden = false;
   }, 900);
   restState = null;
 }
 function toMenu() {
+  if (mode === 'online' || net.peer) net.leave();
   phase = 'menu'; shot = null; cpu = null; restState = null;
+  if (balls.length) restoreCueBall();
+  document.body.classList.remove('cn');
   ui.menu.hidden = false; ui.over.hidden = true; ui.top.hidden = true;
   renderControls();
+}
+
+// ---------------- Chinese Pool scoring ----------------
+const CN_WORDS = [[25, '神之一击', 'GODLIKE'], [15, '无敌', 'UNSTOPPABLE'], [8, '暴力', 'BRUTAL'], [4, '好球', 'NICE SHOT'], [2, '连击', 'COMBO']];
+function chineseScore() {
+  if (!shot) return;
+  shot.streak = (shot.streak || 0) + 1;
+  cn.score += 10 * shot.streak;
+  renderHUD();
+  const w = CN_WORDS.find(x => shot.streak >= x[0]);
+  if (w && (shot.streak === w[0] || shot.streak % 5 === 0)) { combo(w[1], `${w[2]} ×${shot.streak}`); shake = Math.max(shake, 0.012); }
+}
+function endChinese(s) {
+  const sunk = s.potted.filter(n => n === -1).length;
+  if (s.potted.includes(0)) {
+    cn.score = Math.max(0, cn.score - 50);
+    const sp = freeSpot(-L / 2, 0, cue, -1); resetBall(cue, sp.x, sp.z);
+    say('Scratch! −50', 'foul', 1600);
+  }
+  if (sunk >= 5) {   // big shots earn a random ability
+    const p = POWERS[Math.floor(Math.random() * POWERS.length)];
+    cn.charges[p.id] = (cn.charges[p.id] || 0) + 1;
+    setTimeout(() => { say(`+1 ${p.name} (${p.glyph})`, 'good', 1600); sndPower(); }, 700);
+  }
+  const left = balls.filter(b => b.kind === 'crowd' && onTable(b)).length;
+  if (left === 0 || cn.shotsLeft <= 0) {
+    if (left === 0) cn.score += cn.shotsLeft * 200;
+    const best = cn.score > cn.best;
+    if (best) { cn.best = cn.score; try { localStorage.setItem('cp-cn-best', String(cn.score)); } catch (_) {} }
+    phase = 'over'; renderHUD(); renderControls();
+    setTimeout(() => {
+      $('overtitle').textContent = left === 0 ? '清台! Table cleared' : `${cn.score.toLocaleString()} points`;
+      $('oversub').textContent = `${120 - left} of 120 balls sunk. ${best ? 'New best!' : `Best: ${cn.best.toLocaleString()}`}`;
+      ui.over.hidden = false;
+    }, 900);
+    return;
+  }
+  startTurn();
 }
 
 // ---------------- CPU ----------------
 function pathClear(ax, az, bx, bz, skip) {
   const dx = bx - ax, dz = bz - az, len2 = dx * dx + dz * dz;
   for (const b of balls) {
-    if (!onTable(b) || skip.includes(b.n)) continue;
+    if (!onTable(b) || skip.includes(b)) continue;
     let t = len2 ? ((b.x - ax) * dx + (b.z - az) * dz) / len2 : 0; t = clamp(t, 0, 1);
     if (Math.hypot(ax + dx * t - b.x, az + dz * t - b.z) < 2 * R * 0.98) return false;
   }
   return true;
 }
 function bestShotFrom(cx, cz) {
-  const tn = lowest(), t = balls[tn];
+  const targets = legalTargets(cur).map(ballByN).filter(Boolean);
   let best = null;
-  for (const p of POCKET_AIM) {
+  for (const t of targets) for (const p of POCKET_AIM) {
     const ux = p.x - t.x, uz = p.z - t.z, d2 = Math.hypot(ux, uz), nux = ux / d2, nuz = uz / d2;
     if (p.side && Math.abs(nuz) < 0.5) continue;
     const gx = t.x - nux * 2 * R, gz = t.z - nuz * 2 * R;
@@ -793,39 +1251,39 @@ function bestShotFrom(cx, cz) {
     if (d1 < 1e-4) continue;
     const ndx = vx / d1, ndz = vz / d1, cosCut = ndx * nux + ndz * nuz;
     if (cosCut < 0.3) continue;
-    if (!pathClear(cx, cz, gx, gz, [0, tn]) || !pathClear(t.x, t.z, p.x, p.z, [0, tn])) continue;
+    if (!pathClear(cx, cz, gx, gz, [cue, t]) || !pathClear(t.x, t.z, p.x, p.z, [cue, t])) continue;
     const score = d1 * 0.5 + d2 + (1 - cosCut) * 3;
-    if (!best || score < best.score) best = {score, ang: Math.atan2(ndz, ndx), d1, d2, cosCut};
+    if (!best || score < best.score) best = {score, ang: Math.atan2(ndz, ndx), d1, d2, cosCut, t};
   }
   return best;
 }
 function cpuPlace() {
-  const tn = lowest(), t = balls[tn];
+  const targets = legalTargets(cur).map(ballByN).filter(Boolean);
   let pick = null;
-  for (const p of POCKET_AIM) {
+  for (const t of targets) for (const p of POCKET_AIM) {
     const ux = p.x - t.x, uz = p.z - t.z, d = Math.hypot(ux, uz);
-    for (const back of [0.3, 0.45, 0.2, 0.6]) {
+    for (const back of [0.3, 0.45, 0.2]) {
       const x = t.x - ux / d * (2 * R + back), z = t.z - uz / d * (2 * R + back);
       if (!validSpot(x, z, cue)) continue;
       const s = bestShotFrom(x, z);
       if (s && (!pick || s.score < pick.s.score)) pick = {x, z, s};
     }
   }
-  if (!pick) { const sp = freeSpot(-L / 2, 0, cue, -1); pick = {x:sp.x, z:sp.z}; }
+  if (!pick) { const sp = freeSpot(-L / 2, 0, cue, -1); pick = {x: sp.x, z: sp.z}; }
   resetBall(cue, pick.x, pick.z);
 }
 function gauss() { return (Math.random() + Math.random() + Math.random() - 1.5) * 1.4; }
 function cpuPlan() {
   if (ballInHand && !headOnly) { cpuPlace(); say('CPU takes ball in hand', '', 1200); }
   let ang, pw;
-  const t = balls[lowest()];
+  const t = ballByN(legalTargets(cur)[0]) || cue;
   if (isBreak) {
-    ang = Math.atan2(t.z - cue.z, t.x - cue.x) + gauss() * 0.004; pw = 0.97;
+    const apex = game === '9' ? ballByN(1) : balls.filter(b => b.kind === 'num').reduce((a, b) => (b.x < a.x ? b : a));
+    ang = Math.atan2(apex.z - cue.z, apex.x - cue.x) + gauss() * 0.004; pw = 0.97;
   } else {
     const s = bestShotFrom(cue.x, cue.z);
     if (s) {
-      const v2 = speedForDist(s.d2 + 0.18);
-      const vA = v2 / (s.cosCut * 0.975);
+      const v2 = speedForDist(s.d2 + 0.18), vA = v2 / (s.cosCut * 0.975);
       const v1 = speedForDist(s.d1 + distFor(vA)) * 1.08;
       ang = s.ang + gauss() * 0.0075;
       pw = clamp(powerFor(Math.min(v1, MAXV * 0.92)), 0.18, 0.92);
@@ -834,7 +1292,7 @@ function cpuPlan() {
       pw = clamp(powerFor(speedForDist(Math.hypot(t.x - cue.x, t.z - cue.z) + 0.9)), 0.3, 0.8);
     }
   }
-  cpu = {stage:'think', t:0, from:theta, to:theta + angDiff(theta, ang), power:pw};
+  cpu = {stage: 'think', t: 0, from: theta, to: theta + angDiff(theta, ang), power: pw};
 }
 function cpuUpdate(dt) {
   if (!cpu) { cpuPlan(); return; }
@@ -845,11 +1303,139 @@ function cpuUpdate(dt) {
     theta = cpu.from + (cpu.to - cpu.from) * e;
     if (k >= 1) { cpu.stage = 'pull'; cpu.t = 0; }
   } else if (cpu.stage === 'pull') {
-    const k = Math.min(1, cpu.t / 0.6);
-    power = cpu.power * k;
-    if (cpu.t > 0.85) { shoot(); }
+    power = cpu.power * Math.min(1, cpu.t / 0.6);
+    if (cpu.t > 0.85) shoot();
   }
 }
+
+// ---------------- online play (phone to phone over PeerJS) ----------------
+const PUBLIC_URL = 'https://bryce-and.github.io/corner-pocket/';
+const ROOM_PREFIX = 'cornerpocket-';
+const isLocalHost = () => /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+const net = {
+  peer: null, conn: null, me: 0, code: null, lastSend: 0, lastAim: '',
+  send(m) { if (this.conn && this.conn.open) { try { this.conn.send(m); } catch (_) {} } },
+  panel(title, sub, opts = {}) {
+    ui.online.hidden = false; ui.menu.hidden = true;
+    $('ontitle').textContent = title; $('onsub').textContent = sub;
+    $('linkrow').hidden = !opts.link; $('onwait').hidden = !opts.link;
+    $('oncancel').textContent = opts.back || 'Cancel';
+  },
+  fail(text) { this.cleanup(); this.panel("Couldn't connect", text, {back: 'Back to menu'}); },
+  errText(e) {
+    if (e && e.type === 'peer-unavailable') return 'That game link has expired, or your friend closed the game. Ask them to send a new link.';
+    if (!location.hostname.endsWith('github.io') && !isLocalHost()) return 'Online play only works on the public site: ' + PUBLIC_URL;
+    if (e && e.type === 'browser-incompatible') return 'This browser cannot do online play. Try Safari or Chrome.';
+    return 'Check your internet connection and try again.';
+  },
+  host() {
+    if (typeof Peer === 'undefined') return this.fail(this.errText());
+    this.me = 0; this.code = Math.random().toString(36).slice(2, 8);
+    this.panel('Play online', 'Setting up your table…');
+    const peer = this.peer = new Peer(ROOM_PREFIX + this.code);
+    peer.on('open', () => {
+      const base = location.hostname.endsWith('github.io') || isLocalHost() ? location.origin + location.pathname : PUBLIC_URL;
+      $('roomlink').value = base + '?room=' + this.code;
+      $('sharebtn').textContent = navigator.share ? 'Send link' : 'Copy link';
+      this.panel('Play online', `${game === '9' ? '9-ball' : '8-ball'}. Send this link to a friend. The game starts when they open it.`, {link: true});
+    });
+    peer.on('connection', c => {
+      if (this.conn) { c.on('open', () => c.close()); return; }   // table is full
+      this.attach(c);
+    });
+    peer.on('error', e => this.fail(this.errText(e)));
+  },
+  join(code) {
+    if (typeof Peer === 'undefined') return this.fail(this.errText());
+    this.me = 1; this.code = code;
+    this.panel('Joining your friend', 'Connecting to their table…');
+    const peer = this.peer = new Peer();
+    peer.on('open', () => this.attach(peer.connect(ROOM_PREFIX + code, {reliable: true})));
+    peer.on('error', e => this.fail(this.errText(e)));
+    this.timer = setTimeout(() => {
+      if (mode !== 'online') this.fail("Couldn't reach your friend's game. Some Wi-Fi networks block direct phone-to-phone connections. Try again, or switch one phone to cell data.");
+    }, 20000);
+  },
+  attach(c) {
+    this.conn = c;
+    c.on('open', () => { if (this.me === 0) this.begin(); });
+    c.on('data', m => this.onData(m));
+    c.on('close', () => { if (this.conn === c) this.lost(); });
+  },
+  setup() {
+    mode = 'online';
+    players = [0, 1].map(i => ({name: i === this.me ? 'You' : 'Friend', remote: i !== this.me}));
+    ui.online.hidden = true;
+    try { history.replaceState(null, '', location.pathname); } catch (_) {}
+  },
+  begin() {   // the host racks and tells the guest where every ball is
+    this.setup();
+    rack();
+    this.send({t: 'start', game, breaker, balls: balls.map(b => [b.n, b.x, b.z])});
+    newRack(true);
+  },
+  onData(m) {
+    if (!m || typeof m !== 'object') return;
+    const num = v => typeof v === 'number' && isFinite(v);
+    const onCloth = (x, z) => num(x) && num(z) && Math.abs(x) <= L - R && Math.abs(z) <= W - R;
+    const remoteAim = () => {
+      if (num(m.theta)) theta = m.theta;
+      if (num(m.power)) power = clamp(m.power, 0, 1);
+      if (num(m.sx)) spinX = clamp(m.sx, -1, 1);
+      if (num(m.sy)) spinY = clamp(m.sy, -1, 1);
+      if (onCloth(m.cx, m.cz)) { cue.x = cue.px = m.cx; cue.z = cue.pz = m.cz; }
+    };
+    if (m.t === 'start' && this.me === 1 && Array.isArray(m.balls)) {
+      game = m.game === '9' ? '9' : '8';
+      this.setup(); rack();
+      breaker = m.breaker === 1 ? 1 : 0;
+      m.balls.forEach((p, i) => { const b = balls[i]; if (b && Array.isArray(p) && p[0] === b.n && onCloth(p[1], p[2])) resetBall(b, p[1], p[2]); });
+      newRack(true);
+      return;
+    }
+    if (mode !== 'online') return;
+    const theirTurn = players[cur] && players[cur].remote;
+    if (m.t === 'aim' && theirTurn && phase === 'aim') remoteAim();
+    else if (m.t === 'shot' && theirTurn && phase === 'aim') { remoteAim(); shoot(); }
+    else if (m.t === 'result' && shot && shot.remote) {
+      for (const b of balls) { b.vx = 0; b.vz = 0; }
+      if (Array.isArray(m.balls)) m.balls.forEach((p, i) => {
+        const b = balls[i]; if (!b || !Array.isArray(p)) return;
+        if (p[0] && onCloth(p[1], p[2])) resetBall(b, p[1], p[2]); else { b.state = 'gone'; if (b.mesh) b.mesh.visible = false; }
+      });
+      shot.first = num(m.first) ? m.first : null;
+      shot.potted = Array.isArray(m.potted) ? m.potted.filter(num) : [];
+      phase = 'moving';
+      endShot();
+      renderHUD();
+    }
+    else if (m.t === 'rematch' && this.me === 0) this.rematch();
+    else if (m.t === 'bye') this.lost();
+  },
+  rematch() {
+    if (this.me === 0) { breaker = 1 - breaker; this.begin(); }
+    else { this.send({t: 'rematch'}); $('oversub').textContent = 'Waiting for your friend to rack…'; }
+  },
+  tick(t) {   // stream my aim so my friend watches me line up the shot
+    if (!players[cur] || players[cur].remote || (phase !== 'aim' && phase !== 'place') || t - this.lastSend < 0.08) return;
+    const key = [theta.toFixed(4), power.toFixed(3), spinX.toFixed(2), spinY.toFixed(2), cue.x.toFixed(4), cue.z.toFixed(4)].join();
+    if (key === this.lastAim) return;
+    this.lastAim = key; this.lastSend = t;
+    this.send({t: 'aim', theta, power, sx: spinX, sy: spinY, cx: cue.x, cz: cue.z});
+  },
+  lost() {
+    const playing = mode === 'online';
+    this.cleanup();
+    if (playing) { mode = null; toMenu(); say('Your friend left the game', 'foul', 2600); }
+  },
+  cleanup() {
+    clearTimeout(this.timer);
+    const c = this.conn, p = this.peer; this.conn = null; this.peer = null;
+    try { if (c) c.close(); } catch (_) {}
+    try { if (p) p.destroy(); } catch (_) {}
+  },
+  leave() { this.send({t: 'bye'}); this.cleanup(); if (mode === 'online') mode = null; }
+};
 
 // ---------------- input ----------------
 const ray = new THREE.Raycaster(), ndc = new THREE.Vector2(), plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -R), hitPt = new THREE.Vector3();
@@ -874,19 +1460,19 @@ let drag = null, pinch = null;
 canvas.addEventListener('pointerdown', e => {
   audioInit();
   try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
-  ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  ptrs.set(e.pointerId, {x: e.clientX, y: e.clientY});
   if (ptrs.size === 2) {
     const [a, b] = [...ptrs.values()];
     pinch = {d: Math.hypot(a.x - b.x, a.y - b.y) || 1, dist: camDist}; drag = null; return;
   }
   if (!humanTurn()) return;
-  if (phase === 'place') { placeAt(e); drag = {kind:'place'}; }
-  else if (viewMode === 'top') { aimAt(e); drag = {kind:'point'}; }
-  else drag = {kind:'rot', x:e.clientX, y:e.clientY};
+  if (phase === 'place') { placeAt(e); drag = {kind: 'place'}; }
+  else if (viewMode === 'top') { aimAt(e); drag = {kind: 'point'}; }
+  else drag = {kind: 'rot', x: e.clientX, y: e.clientY};
 });
 canvas.addEventListener('pointermove', e => {
   if (!ptrs.has(e.pointerId)) return;
-  ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  ptrs.set(e.pointerId, {x: e.clientX, y: e.clientY});
   if (pinch && ptrs.size >= 2) {
     const [a, b] = [...ptrs.values()];
     camDist = clamp(pinch.dist * pinch.d / (Math.hypot(a.x - b.x, a.y - b.y) || 1), 0.3, 1.8); return;
@@ -904,7 +1490,7 @@ canvas.addEventListener('pointermove', e => {
 function ptrEnd(e) { ptrs.delete(e.pointerId); if (ptrs.size < 2) pinch = null; if (ptrs.size === 0) drag = null; }
 canvas.addEventListener('pointerup', ptrEnd);
 canvas.addEventListener('pointercancel', ptrEnd);
-canvas.addEventListener('wheel', e => { e.preventDefault(); camDist = clamp(camDist * Math.exp(e.deltaY * 0.001), 0.3, 1.8); }, {passive:false});
+canvas.addEventListener('wheel', e => { e.preventDefault(); camDist = clamp(camDist * Math.exp(e.deltaY * 0.001), 0.3, 1.8); }, {passive: false});
 
 let pdrag = null;
 ui.power.addEventListener('pointerdown', e => {
@@ -924,11 +1510,15 @@ ui.power.addEventListener('pointerup', e => {
 });
 ui.power.addEventListener('pointercancel', () => { pdrag = null; power = 0; renderPower(); });
 
+// spin: touch anywhere on the cue ball icon, left/right and up/down
 const spinpad = $('spinpad');
 function setSpin(e) {
   const r = spinpad.getBoundingClientRect();
-  const v = -((e.clientY - r.top) / r.height * 2 - 1) / 0.8;
-  spin = Math.abs(v) < 0.18 ? 0 : clamp(v, -1, 1); renderSpin();
+  let x = ((e.clientX - r.left) / r.width * 2 - 1) / 0.8, y = -((e.clientY - r.top) / r.height * 2 - 1) / 0.8;
+  const m = Math.hypot(x, y);
+  if (m > 1) { x /= m; y /= m; }
+  if (m < 0.18) { x = 0; y = 0; }
+  spinX = x; spinY = y; renderSpin();
 }
 let spinDrag = false;
 spinpad.addEventListener('pointerdown', e => { if (!humanTurn()) return; spinDrag = true; try { spinpad.setPointerCapture(e.pointerId); } catch (_) {} setSpin(e); });
@@ -936,13 +1526,23 @@ spinpad.addEventListener('pointermove', e => { if (spinDrag) setSpin(e); });
 spinpad.addEventListener('pointerup', () => { spinDrag = false; });
 spinpad.addEventListener('pointercancel', () => { spinDrag = false; });
 
+ui.powers.addEventListener('click', e => {
+  const b = e.target.closest('[data-pw]');
+  if (!b || !humanTurn() || phase !== 'aim') return;
+  const id = b.dataset.pw;
+  if (!(cn.charges[id] > 0)) return;
+  cn.armed = cn.armed === id ? null : id;
+  if (cn.armed) { const P = POWERS.find(p => p.id === id); say(`${P.glyph} ${P.name}: ${P.tip}`, 'good', 1800); tone(700, 0.1, 0.1); }
+  renderPowers();
+});
+
 for (const [id, dir] of [['left', -1], ['right', 1]]) {
   const b = $(id);
   b.addEventListener('pointerdown', e => { e.preventDefault(); fineDir = dir; fineHold = 0; try { b.setPointerCapture(e.pointerId); } catch (_) {} });
   for (const ev of ['pointerup', 'pointercancel', 'lostpointercapture']) b.addEventListener(ev, () => { fineDir = 0; });
 }
 $('moveball').addEventListener('click', () => { if (phase === 'aim' && humanTurn()) { phase = 'place'; renderControls(); } });
-$('done').addEventListener('click', () => { if (phase === 'place') { phase = 'aim'; aimAtLowest(); renderControls(); } });
+$('done').addEventListener('click', () => { if (phase === 'place') { phase = 'aim'; aimAtTarget(); renderControls(); } });
 $('viewbtn').addEventListener('click', () => { viewMode = viewMode === 'cue' ? 'top' : 'cue'; renderControls(); });
 $('menubtn').addEventListener('click', toMenu);
 $('soundbtn').addEventListener('click', () => {
@@ -950,9 +1550,53 @@ $('soundbtn').addEventListener('click', () => {
   $('sw').style.opacity = muted ? 0.15 : 1;
   $('soundbtn').setAttribute('aria-label', muted ? 'Sound off' : 'Sound on');
 });
+// game picker
+document.querySelectorAll('[data-game]').forEach(b => b.addEventListener('click', () => {
+  game = b.dataset.game;
+  document.querySelectorAll('[data-game]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  $('rulesline').innerHTML = game === '9'
+    ? '<b>Rules:</b> always hit the lowest number first. Sink the 9 to win.'
+    : '<b>Rules:</b> sink a ball to claim solids or stripes. Clear your group, then sink the 8.';
+  try { localStorage.setItem('cp-game', game); } catch (_) {}
+}));
+try { const g = localStorage.getItem('cp-game'); if (g === '9') document.querySelector('[data-game="9"]').click(); } catch (_) {}
 document.querySelectorAll('[data-mode]').forEach(b => b.addEventListener('click', () => { audioInit(); startGame(b.dataset.mode); }));
-$('rematch').addEventListener('click', () => { if (players.length > 1) breaker = 1 - breaker; newRack(); });
+// the secret: tap the row of balls five times
+let secretTaps = [];
+function unlockChinese(announce) {
+  $('cnbtn').hidden = false;
+  if (announce) { say('中式台球 unlocked: Chinese Pool', 'good', 2400); sndPower(); }
+}
+$('rackart').addEventListener('click', () => {
+  audioInit();
+  const now = performance.now();
+  secretTaps = secretTaps.filter(t => now - t < 2500); secretTaps.push(now);
+  $('rackart').classList.remove('tap'); void $('rackart').offsetWidth; $('rackart').classList.add('tap');
+  if (secretTaps.length >= 5 && $('cnbtn').hidden) {
+    unlockChinese(true);
+    try { localStorage.setItem('cp-cn', '1'); } catch (_) {}
+  }
+});
+try { if (localStorage.getItem('cp-cn') === '1') unlockChinese(false); } catch (_) {}
+$('rematch').addEventListener('click', () => {
+  if (mode === 'online') { net.rematch(); return; }
+  if (players.length > 1) breaker = 1 - breaker;
+  newRack();
+});
 $('tomenu').addEventListener('click', toMenu);
+$('onlinebtn').addEventListener('click', () => { audioInit(); if (game === 'chinese') game = '8'; net.host(); });
+$('oncancel').addEventListener('click', () => {
+  net.cleanup(); ui.online.hidden = true;
+  try { history.replaceState(null, '', location.pathname); } catch (_) {}
+  toMenu();
+});
+$('sharebtn').addEventListener('click', () => {
+  const url = $('roomlink').value, btn = $('sharebtn');
+  if (navigator.share) { navigator.share({title: 'Corner Pocket', text: 'Shoot some pool with me', url}).catch(() => {}); return; }
+  const picked = () => { $('roomlink').select(); btn.textContent = 'Link selected, copy it'; };
+  if (navigator.clipboard) navigator.clipboard.writeText(url).then(() => { btn.textContent = 'Copied!'; }, picked);
+  else picked();
+});
 window.addEventListener('keydown', e => {
   if (phase !== 'aim' || !humanTurn()) return;
   if (e.key === 'ArrowLeft') theta -= e.shiftKey ? 0.02 : 0.004;
@@ -966,6 +1610,7 @@ const fitCam = new THREE.PerspectiveCamera();
 const fits = {};
 const CORNERS = [];
 for (const sx of [-1, 1]) for (const sz of [-1, 1]) CORNERS.push(new THREE.Vector3(sx * (L + CW + 0.06), 0.05, sz * (W + CW + 0.06)));
+let shake = 0;
 function fitDistance(look, fwd, up) {
   const w = innerWidth, h = innerHeight;
   const yTop = 1 - 2 * Math.min(110, h * 0.17) / h, yBot = -1 + 2 * Math.min(120, h * 0.2) / h;
@@ -1012,13 +1657,13 @@ function desiredCamera(t) {
   }
   const dx = Math.cos(theta), dz = Math.sin(theta);
   const cp = Math.cos(camPitch), sp = Math.sin(camPitch);
-  tPos.set(cue.x - dx * cp * camDist, R + sp * camDist, cue.z - dz * cp * camDist);
+  const big = game === 'chinese' && cn.armed === 'sword' ? 1.5 : 1;
+  tPos.set(cue.x - dx * cp * camDist * big, R + sp * camDist * big, cue.z - dz * cp * camDist * big);
   const ahead = 0.25 + camDist * 0.35;
   tLook.set(cue.x + dx * ahead, 0, cue.z + dz * ahead);
   tUp.set(0, 1, 0);
   return 11;
 }
-
 function resize() {
   const w = innerWidth, h = innerHeight;
   renderer.setSize(w, h, false);
@@ -1033,8 +1678,34 @@ resize();
 
 // ---------------- frame loop ----------------
 const qTmp = new THREE.Quaternion(), axis = new THREE.Vector3(), Y = new THREE.Vector3(0, 1, 0);
-const tipDir = new THREE.Vector3();
+const tipDir = new THREE.Vector3(), mtx = new THREE.Matrix4(), vPos = new THREE.Vector3(), vScale = new THREE.Vector3();
 let last = performance.now(), acc = 0, clockT = 0;
+function drawGuide(dx, dz) {
+  aimLine.visible = objLine.visible = cueLine.visible = ghost.visible = false;
+  laserLines.forEach(l => { l.visible = false; });
+  const laser = game === 'chinese' && cn.armed === 'laser';
+  const hit = castAim(cue.x, cue.z, dx, dz);
+  const gx = cue.x + dx * hit.t, gz = cue.z + dz * hit.t;
+  setStrip(aimLine, cue.x + dx * R, cue.z + dz * R, gx - dx * R * (hit.ball ? 1 : 0), gz - dz * R * (hit.ball ? 1 : 0), 0.004);
+  ghost.visible = true; ghost.position.set(gx, R, gz);
+  if (hit.ball) {
+    const nx = hit.ball.x - gx, nz = hit.ball.z - gz, nl = Math.hypot(nx, nz), ux = nx / nl, uz = nz / nl;
+    const dot = dx * ux + dz * uz, len = laser ? 1.6 : 0.06 + 0.32 * dot;
+    setStrip(objLine, hit.ball.x, hit.ball.z, hit.ball.x + ux * len, hit.ball.z + uz * len, 0.005, 0.0018);
+    const tx = dx - ux * dot, tz = dz - uz * dot;
+    setStrip(cueLine, gx, gz, gx + tx * (laser ? 0.8 : 0.25), gz + tz * (laser ? 0.8 : 0.25), 0.003, 0.0016);
+  } else if (laser) {   // follow the cue ball around the rails
+    let x = gx, z = gz, ddx = dx, ddz = dz, wallX = hit.wallX;
+    for (let i = 0; i < 4; i++) {
+      if (wallX) ddx = -ddx; else ddz = -ddz;
+      const h2 = castAim(x, z, ddx, ddz);
+      const ex = x + ddx * h2.t, ez = z + ddz * h2.t;
+      setStrip(laserLines[i], x, z, ex, ez, 0.005, 0.002);
+      x = ex; z = ez; wallX = h2.wallX;
+      if (h2.ball) break;
+    }
+  }
+}
 function update(dt) {
   clockT += dt;
   for (const b of balls) { b.px = b.x; b.pz = b.z; }
@@ -1044,71 +1715,74 @@ function update(dt) {
     theta += fineDir * (0.03 + 0.45 * Math.pow(Math.min(fineHold / 1.6, 1), 2)) * dt;
   }
   if (phase === 'aim' && players[cur] && players[cur].cpu) cpuUpdate(dt);
-  if (phase === 'aim' && cpu) renderPower();
+  if (phase === 'aim' && (cpu || (players[cur] && players[cur].remote))) renderPower();
 
-  if (phase === 'stroke') {
-    strokeT += dt;
-    if (strokeT >= 0.08) strike();
-  }
+  if (phase === 'stroke') { strokeT += dt; if (strokeT >= 0.08) strike(); }
   if (phase === 'moving') {
     acc += dt; let n = 0;
     while (acc >= H && n < 80) { physStep(H); acc -= H; n++; }
     shot.time += dt;
     if (shot.time > 30) for (const b of balls) { b.vx = 0; b.vz = 0; }
+    if (shot.power === 'fire' && onTable(cue) && (cue.vx || cue.vz)) burst(cue.x, 0.03, cue.z, 2, Math.random() < 0.5 ? 0xff5a1f : 0xffc94d, 0.35);
   } else acc = 0;
 
+  const holeOn = !!(shot && shot.power === 'hole' && phase === 'moving');
+  swirls.forEach((s, i) => { s.visible = holeOn; if (holeOn) { s.rotation.z += dt * 6; s.scale.setScalar(1 + Math.sin(clockT * 8 + i) * 0.1); } });
+
+  let ci = 0;
   for (const b of balls) {
     if (b.state === 'sinking') {
       b.sinkT += dt;
       const k = Math.min(1, b.sinkT / 0.35), f = Math.min(1, dt * 14);
       b.x += (b.pocket.x - b.x) * f; b.z += (b.pocket.z - b.z) * f;
-      b.y = R - k * 0.1;
-      if (k >= 1) { b.state = 'gone'; b.mesh.visible = false; b.vx = b.vz = 0; renderHUD(); }
+      b.y = b.r - k * 0.1;
+      if (k >= 1) { b.state = 'gone'; if (b.mesh) b.mesh.visible = false; b.vx = b.vz = 0; renderHUD(); }
     }
-    if (b.state === 'gone') continue;
     const mx = b.x - b.px, mz = b.z - b.pz, d = Math.hypot(mx, mz);
-    if (d > 1e-7) {
-      axis.set(mz / d, 0, -mx / d);
-      qTmp.setFromAxisAngle(axis, d / R);
-      b.mesh.quaternion.premultiply(qTmp);
+    if (d > 1e-7) { axis.set(mz / d, 0, -mx / d); qTmp.setFromAxisAngle(axis, d / b.r); b.q.premultiply(qTmp); }
+    if (b.kind === 'crowd') {
+      vPos.set(b.x, b.y, b.z); vScale.setScalar(b.state === 'gone' ? 0 : 1);
+      mtx.compose(vPos, b.q, vScale); crowdMesh.setMatrixAt(b.idx, mtx); ci++;
+    } else if (b.mesh && b.state !== 'gone') {
+      b.mesh.position.set(b.x, b.y, b.z); b.mesh.quaternion.copy(b.q); b.mesh.scale.setScalar(b.r / R);
     }
-    b.mesh.position.set(b.x, b.y, b.z);
   }
+  if (ci) crowdMesh.instanceMatrix.needsUpdate = true;
+  cue.mesh.material.emissive && cue.mesh.material.emissive.setHex(shot && shot.power === 'fire' && phase === 'moving' ? 0xff4a00 : 0x000000);
 
-  if (phase === 'moving' && !anyMoving()) endShot();
+  if (phase === 'moving' && !anyMoving() && !shot.remote) endShot();   // a friend's shot waits for their result
+  if (mode === 'online') net.tick(clockT);
 
   // guide + cue stick
-  const showAim = (phase === 'aim' || phase === 'stroke' || phase === 'place') && onTable(cue);
   const dx = Math.cos(theta), dz = Math.sin(theta);
-  aimLine.visible = objLine.visible = cueLine.visible = ghost.visible = false;
-  if (showAim && phase !== 'place') {
-    const hit = castAim(cue.x, cue.z, dx, dz);
-    const gx = cue.x + dx * hit.t, gz = cue.z + dz * hit.t;
-    setStrip(aimLine, cue.x + dx * R, cue.z + dz * R, gx - dx * R * (hit.ball ? 1 : 0), gz - dz * R * (hit.ball ? 1 : 0), 0.004);
-    ghost.visible = true; ghost.position.set(gx, R, gz);
-    if (hit.ball) {
-      const nx = hit.ball.x - gx, nz = hit.ball.z - gz, nl = Math.hypot(nx, nz), ux = nx / nl, uz = nz / nl;
-      const dot = dx * ux + dz * uz;
-      setStrip(objLine, hit.ball.x, hit.ball.z, hit.ball.x + ux * (0.06 + 0.32 * dot), hit.ball.z + uz * (0.06 + 0.32 * dot), 0.005, 0.0018);
-      const tx = dx - ux * dot, tz = dz - uz * dot;
-      setStrip(cueLine, gx, gz, gx + tx * 0.25, gz + tz * 0.25, 0.003, 0.0016);
-    }
-  }
-  cueStick.visible = (phase === 'aim' || phase === 'stroke') && onTable(cue);
-  if (cueStick.visible) {
-    const E = 0.075 + Math.max(0, -spin) * 0.03;
+  if ((phase === 'aim' || phase === 'stroke') && onTable(cue)) drawGuide(dx, dz);
+  else { aimLine.visible = objLine.visible = cueLine.visible = ghost.visible = false; laserLines.forEach(l => { l.visible = false; }); }
+  const swordOn = game === 'chinese' && ((phase === 'aim' && cn.armed === 'sword') || (phase === 'stroke' && shot && shot.power === 'sword'));
+  const stickOn = (phase === 'aim' || phase === 'stroke') && onTable(cue);
+  cueStick.visible = stickOn && !swordOn; sword.visible = stickOn && swordOn;
+  if (stickOn) {
+    const E = 0.075 + Math.max(0, -spinY) * 0.03;
     tipDir.set(dx * Math.cos(E), -Math.sin(E), dz * Math.cos(E));
     let gap = 0.012 + power * 0.22;
     if (phase === 'stroke') { const k = Math.min(1, strokeT / 0.08); gap = (0.012 + strokeFrom) * (1 - k * k) - 0.004 * k; }
-    cueStick.quaternion.setFromUnitVectors(Y, tipDir);
-    cueStick.position.set(cue.x, R + spin * R * 0.55, cue.z).addScaledVector(tipDir, -(R + gap));
+    const obj = swordOn ? sword : cueStick;
+    obj.quaternion.setFromUnitVectors(Y, tipDir);
+    // tip lands where the spin pad says: right/left across the ball, up/down for follow/draw
+    obj.position.set(cue.x - dz * spinX * R * 0.6, R + spinY * R * 0.6, cue.z + dx * spinX * R * 0.6).addScaledVector(tipDir, -(R + gap));
   }
+
+  updateSparks(dt);
 
   // camera
   const rate = desiredCamera(clockT);
   const k = 1 - Math.exp(-dt * rate);
   camPos.lerp(tPos, k); camLook.lerp(tLook, k); camUp.lerp(tUp, k).normalize();
-  camera.position.copy(camPos); camera.up.copy(camUp); camera.lookAt(camLook);
+  camera.position.copy(camPos); camera.up.copy(camUp);
+  if (shake > 0.0005) {
+    camera.position.x += (Math.random() - 0.5) * shake; camera.position.y += (Math.random() - 0.5) * shake; camera.position.z += (Math.random() - 0.5) * shake;
+    shake *= Math.exp(-dt * 6);
+  }
+  camera.lookAt(camLook);
   lamps.visible = camPos.y < 0.9;   // keep the shades out of high overhead views
 }
 function frame(now) {
@@ -1120,17 +1794,21 @@ function frame(now) {
 
 // ---------------- boot (keeps a resting game across live updates) ----------------
 function start(data) {
+  game = game === 'chinese' ? '8' : game;
   rack();
   const s = data && data.state;
-  if (s && s.mode) {
-    mode = s.mode;
-    players = mode === 'cpu' ? [{name:'You'}, {name:'CPU', cpu:true}] : mode === 'pvp' ? [{name:'Player 1'}, {name:'Player 2'}] : [{name:'Practice'}];
-    ({cur, breaker, ballInHand, headOnly, isBreak, shots} = s);
-    s.balls.forEach(([on, x, z], n) => { const b = balls[n]; if (on) resetBall(b, x, z); else { b.state = 'gone'; b.mesh.visible = false; } });
+  if (s && s.mode && s.game && s.mode !== 'online') {
+    game = s.game; mode = s.mode; players = makePlayers(mode);
+    rack();
+    ({cur, breaker, ballInHand, headOnly, isBreak, shots, tableOpen} = s);
+    players.forEach((p, i) => { p.group = s.groups && s.groups[i] || null; });
+    s.balls.forEach(([n, on, x, z], i) => { const b = balls[i]; if (!b || b.n !== n) return; if (on) resetBall(b, x, z); else { b.state = 'gone'; if (b.mesh) b.mesh.visible = false; } });
     ui.menu.hidden = true; ui.top.hidden = false;
     startTurn();
   } else {
     renderControls();
+    const room = new URLSearchParams(location.search).get('room');
+    if (room && /^[a-z0-9]{4,12}$/.test(room)) net.join(room);
   }
   requestAnimationFrame(t => { last = t; frame(t); });
 }
